@@ -1,0 +1,1293 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="pytorch_docs">
+      
+      
+        <meta name="author" content="Ean Yang">
+      
+      
+        <link rel="canonical" href="https://eanyang7.github.io/pytorch_docs/08-%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9A%E7%94%9F%E6%80%81%E7%AE%80%E4%BB%8B/8.4%20%E6%96%87%E6%9C%AC%20-%20torchtext/">
+      
+      
+        <link rel="prev" href="../8.3%20%E8%A7%86%E9%A2%91%20-%20PyTorchVideo/">
+      
+      
+        <link rel="next" href="../8.5%20%E9%9F%B3%E9%A2%91%20-%20torchaudio/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.jpg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.14">
+    
+    
+      
+        <title>8.4 torchtext简介 - pytorch 文档教程</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.fad675c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#84-torchtext" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="pytorch 文档教程" class="md-header__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pytorch 文档教程
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              8.4 torchtext简介
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple"  aria-label="切换为暗黑模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换为暗黑模式" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="red"  aria-label="切换为浅色模式"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="切换为浅色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="分享" aria-label="分享" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pytorch 文档教程" class="md-nav__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    pytorch 文档教程
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入浅出PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../00-%E7%AC%AC%E9%9B%B6%E7%AB%A0%EF%BC%9A%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/0.1%20%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%AE%80%E5%8F%B2/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    00 第零章：前置知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../01-%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E7%AE%80%E4%BB%8B%E5%92%8C%E5%AE%89%E8%A3%85/1.1%20PyTorch%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    01 第一章：简介和安装
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../02-%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2.1%20%E5%BC%A0%E9%87%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    02 第二章：基础知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../03-%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E4%B8%BB%E8%A6%81%E7%BB%84%E6%88%90%E6%A8%A1%E5%9D%97/3.1%20%E6%80%9D%E8%80%83%EF%BC%9A%E5%AE%8C%E6%88%90%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%BF%85%E8%A6%81%E9%83%A8%E5%88%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    03 第三章：主要组成模块
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../04-%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E5%AE%9E%E6%88%98/4.1%20ResNet/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    04 第四章：基础实战
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../05-%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/5.1%20PyTorch%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E7%9A%84%E6%96%B9%E5%BC%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    05 第五章：模型定义
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../06-%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9A%E8%BF%9B%E9%98%B6%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/6.1%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    06 第六章：进阶训练技巧
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../07-%E7%AC%AC%E4%B8%83%E7%AB%A0%EF%BC%9A%E5%8F%AF%E8%A7%86%E5%8C%96/7.1%20%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    07 第七章：可视化
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    08 第八章：生态简介
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            08 第八章：生态简介
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.1%20%E6%9C%AC%E7%AB%A0%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.1 本章简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.2%20%E5%9B%BE%E5%83%8F%20-%20torchvision/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.2 torchvision
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.3%20%E8%A7%86%E9%A2%91%20-%20PyTorchVideo/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.3 PyTorchVideo简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    8.4 torchtext简介
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    8.4 torchtext简介
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#841-torchtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.1 torchtext的主要组成部分
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#842-torchtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.2 torchtext的安装
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#843" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.3 构建数据集
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#844-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.4 评测指标（metric）
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#845" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.5 其他
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../8.5%20%E9%9F%B3%E9%A2%91%20-%20torchaudio/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    8.5 torchaudio简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../09-%E7%AC%AC%E4%B9%9D%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/9.1%20%E4%BD%BF%E7%94%A8ONNX%E8%BF%9B%E8%A1%8C%E9%83%A8%E7%BD%B2%E5%B9%B6%E6%8E%A8%E7%90%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    09 第九章：模型部署
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../10-%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E5%B8%B8%E8%A7%81%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/10.1%20%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    10 第十章：常见代码解读
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../notebook/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Notebook
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#841-torchtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.1 torchtext的主要组成部分
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#842-torchtext" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.2 torchtext的安装
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#843" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.3 构建数据集
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#844-metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.4 评测指标（metric）
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#845" class="md-nav__link">
+    <span class="md-ellipsis">
+      8.4.5 其他
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/08-第八章：生态简介/8.4 文本 - torchtext.md" title="编辑此页" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/08-第八章：生态简介/8.4 文本 - torchtext.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5Z"/></svg>
+    </a>
+  
+
+
+<h1 id="84-torchtext">8.4 torchtext简介<a class="headerlink" href="#84-torchtext" title="Permanent link">⚓︎</a></h1>
+<p>本节我们来介绍PyTorch官方用于自然语言处理（NLP）的工具包torchtext。自然语言处理也是深度学习的一大应用场景，近年来随着大规模预训练模型的应用，深度学习在人机对话、机器翻译等领域的取得了非常好的效果，也使得NLP相关的深度学习模型获得了越来越多的关注。</p>
+<p>由于NLP和CV在数据预处理中的不同，因此NLP的工具包torchtext和torchvision等CV相关工具包也有一些功能上的差异，如：</p>
+<ul>
+<li>数据集（dataset）定义方式不同</li>
+<li>数据预处理工具</li>
+<li>没有琳琅满目的model zoo</li>
+</ul>
+<p>本节介绍参考了<a href="https://github.com/atnlp/torchtext-summary">atnlp的Github</a>，在此致谢！</p>
+<h2 id="841-torchtext">8.4.1 torchtext的主要组成部分<a class="headerlink" href="#841-torchtext" title="Permanent link">⚓︎</a></h2>
+<p>torchtext可以方便的对文本进行预处理，例如截断补长、构建词表等。torchtext主要包含了以下的主要组成部分：</p>
+<ul>
+<li>数据处理工具 torchtext.data.functional、torchtext.data.utils</li>
+<li>数据集 torchtext.data.datasets</li>
+<li>词表工具 torchtext.vocab</li>
+<li>评测指标 torchtext.metrics</li>
+</ul>
+<h2 id="842-torchtext">8.4.2 torchtext的安装<a class="headerlink" href="#842-torchtext" title="Permanent link">⚓︎</a></h2>
+<p>torchtext可以直接使用pip进行安装：</p>
+<div class="highlight"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>torchtext
+</code></pre></div>
+<h2 id="843">8.4.3 构建数据集<a class="headerlink" href="#843" title="Permanent link">⚓︎</a></h2>
+<ul>
+<li><strong>Field及其使用</strong></li>
+</ul>
+<p>Field是torchtext中定义数据类型以及转换为张量的指令。<code>torchtext</code> 认为一个样本是由多个字段（文本字段，标签字段）组成，不同的字段可能会有不同的处理方式，所以才会有 <code>Field</code> 抽象。定义Field对象是为了明确如何处理不同类型的数据，但具体的处理则是在Dataset中完成的。下面我们通过一个例子来简要说明一下Field的使用：</p>
+<div class="highlight"><pre><span></span><code><span class="n">tokenize</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+<span class="n">TEXT</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">sequential</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="n">tokenize</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fix_length</span><span class="o">=</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">LABEL</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">sequential</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_vocab</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>其中：</p>
+<p>​   sequential设置数据是否是顺序表示的；</p>
+<p>​   tokenize用于设置将字符串标记为顺序实例的函数</p>
+<p>​   lower设置是否将字符串全部转为小写；</p>
+<p>​   fix_length设置此字段所有实例都将填充到一个固定的长度，方便后续处理；</p>
+<p>​   use_vocab设置是否引入Vocab object，如果为False，则需要保证之后输入field中的data都是numerical的</p>
+<p>构建Field完成后就可以进一步构建dataset了：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torchtext</span> <span class="kn">import</span> <span class="n">data</span>
+<span class="k">def</span> <span class="nf">get_dataset</span><span class="p">(</span><span class="n">csv_data</span><span class="p">,</span> <span class="n">text_field</span><span class="p">,</span> <span class="n">label_field</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="c1"># we won&#39;t be needing the id, so we pass in None as the field</span>
+                 <span class="p">(</span><span class="s2">&quot;comment_text&quot;</span><span class="p">,</span> <span class="n">text_field</span><span class="p">),</span> <span class="p">(</span><span class="s2">&quot;toxic&quot;</span><span class="p">,</span> <span class="n">label_field</span><span class="p">)]</span>       
+    <span class="n">examples</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">if</span> <span class="n">test</span><span class="p">:</span>
+        <span class="c1"># 如果为测试集，则不加载label</span>
+        <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">csv_data</span><span class="p">[</span><span class="s1">&#39;comment_text&#39;</span><span class="p">]):</span>
+            <span class="n">examples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Example</span><span class="o">.</span><span class="n">fromlist</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">fields</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">text</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">csv_data</span><span class="p">[</span><span class="s1">&#39;comment_text&#39;</span><span class="p">],</span> <span class="n">csv_data</span><span class="p">[</span><span class="s1">&#39;toxic&#39;</span><span class="p">])):</span>
+            <span class="n">examples</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">Example</span><span class="o">.</span><span class="n">fromlist</span><span class="p">([</span><span class="kc">None</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="n">label</span><span class="p">],</span> <span class="n">fields</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">examples</span><span class="p">,</span> <span class="n">fields</span>
+</code></pre></div>
+<p>这里使用数据csv_data中有"comment_text"和"toxic"两列，分别对应text和label。</p>
+<div class="highlight"><pre><span></span><code><span class="n">train_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;train_toxic_comments.csv&#39;</span><span class="p">)</span>
+<span class="n">valid_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;valid_toxic_comments.csv&#39;</span><span class="p">)</span>
+<span class="n">test_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;test_toxic_comments.csv&quot;</span><span class="p">)</span>
+<span class="n">TEXT</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">sequential</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">tokenize</span><span class="o">=</span><span class="n">tokenize</span><span class="p">,</span> <span class="n">lower</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">LABEL</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Field</span><span class="p">(</span><span class="n">sequential</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_vocab</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="c1"># 得到构建Dataset所需的examples和fields</span>
+<span class="n">train_examples</span><span class="p">,</span> <span class="n">train_fields</span> <span class="o">=</span> <span class="n">get_dataset</span><span class="p">(</span><span class="n">train_data</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">,</span> <span class="n">LABEL</span><span class="p">)</span>
+<span class="n">valid_examples</span><span class="p">,</span> <span class="n">valid_fields</span> <span class="o">=</span> <span class="n">get_dataset</span><span class="p">(</span><span class="n">valid_data</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">,</span> <span class="n">LABEL</span><span class="p">)</span>
+<span class="n">test_examples</span><span class="p">,</span> <span class="n">test_fields</span> <span class="o">=</span> <span class="n">get_dataset</span><span class="p">(</span><span class="n">test_data</span><span class="p">,</span> <span class="n">TEXT</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="n">test</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="c1"># 构建Dataset数据集</span>
+<span class="n">train</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">train_examples</span><span class="p">,</span> <span class="n">train_fields</span><span class="p">)</span>
+<span class="n">valid</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">valid_examples</span><span class="p">,</span> <span class="n">valid_fields</span><span class="p">)</span>
+<span class="n">test</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">test_examples</span><span class="p">,</span> <span class="n">test_fields</span><span class="p">)</span>
+</code></pre></div>
+<p>可以看到，定义Field对象完成后，通过get_dataset函数可以读入数据的文本和标签，将二者（examples）连同field一起送到torchtext.data.Dataset类中，即可完成数据集的构建。使用以下命令可以看下读入的数据情况：</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># 检查keys是否正确</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">test</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+<span class="c1"># 抽查内容是否正确</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">train</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">comment_text</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li><strong>词汇表（vocab）</strong></li>
+</ul>
+<p>在NLP中，将字符串形式的词语（word）转变为数字形式的向量表示（embedding）是非常重要的一步，被称为Word Embedding。这一步的基本思想是收集一个比较大的语料库（尽量与所做的任务相关），在语料库中使用word2vec之类的方法构建词语到向量（或数字）的映射关系，之后将这一映射关系应用于当前的任务，将句子中的词语转为向量表示。</p>
+<p>在torchtext中可以使用Field自带的build_vocab函数完成词汇表构建。</p>
+<div class="highlight"><pre><span></span><code><span class="n">TEXT</span><span class="o">.</span><span class="n">build_vocab</span><span class="p">(</span><span class="n">train</span><span class="p">)</span>
+</code></pre></div>
+<ul>
+<li><strong>数据迭代器</strong></li>
+</ul>
+<p>其实就是torchtext中的DataLoader，看下代码就明白了：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torchtext.data</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">BucketIterator</span>
+<span class="c1"># 若只针对训练集构造迭代器</span>
+<span class="c1"># train_iter = data.BucketIterator(dataset=train, batch_size=8, shuffle=True, sort_within_batch=False, repeat=False)</span>
+
+<span class="c1"># 同时对训练集和验证集进行迭代器的构建</span>
+<span class="n">train_iter</span><span class="p">,</span> <span class="n">val_iter</span> <span class="o">=</span> <span class="n">BucketIterator</span><span class="o">.</span><span class="n">splits</span><span class="p">(</span>
+        <span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">valid</span><span class="p">),</span> <span class="c1"># 构建数据集所需的数据集</span>
+        <span class="n">batch_sizes</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span>
+        <span class="n">device</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="c1"># 如果使用gpu，此处将-1更换为GPU的编号</span>
+        <span class="n">sort_key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">comment_text</span><span class="p">),</span> <span class="c1"># the BucketIterator needs to be told what function it should use to group the data.</span>
+        <span class="n">sort_within_batch</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span>
+
+<span class="n">test_iter</span> <span class="o">=</span> <span class="n">Iterator</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">device</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">sort</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sort_within_batch</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</code></pre></div>
+<p>torchtext支持只对一个dataset和同时对多个dataset构建数据迭代器。</p>
+<ul>
+<li><strong>使用自带数据集</strong></li>
+</ul>
+<p>与torchvision类似，torchtext也提供若干常用的数据集方便快速进行算法测试。可以查看<a href="https://pytorch.org/text/stable/datasets.html">官方文档</a>寻找想要使用的数据集。</p>
+<h2 id="844-metric">8.4.4 评测指标（metric）<a class="headerlink" href="#844-metric" title="Permanent link">⚓︎</a></h2>
+<p>NLP中部分任务的评测不是通过准确率等指标完成的，比如机器翻译任务常用BLEU (bilingual evaluation understudy) score来评价预测文本和标签文本之间的相似程度。torchtext中可以直接调用torchtext.data.metrics.bleu_score来快速实现BLEU，下面是一个官方文档中的一个例子：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">from</span> <span class="nn">torchtext.data.metrics</span> <span class="kn">import</span> <span class="n">bleu_score</span>
+<span class="n">candidate_corpus</span> <span class="o">=</span> <span class="p">[[</span><span class="s1">&#39;My&#39;</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="s1">&#39;pytorch&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Another&#39;</span><span class="p">,</span> <span class="s1">&#39;Sentence&#39;</span><span class="p">]]</span>
+<span class="n">references_corpus</span> <span class="o">=</span> <span class="p">[[[</span><span class="s1">&#39;My&#39;</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="s1">&#39;pytorch&#39;</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;Completely&#39;</span><span class="p">,</span> <span class="s1">&#39;Different&#39;</span><span class="p">]],</span> <span class="p">[[</span><span class="s1">&#39;No&#39;</span><span class="p">,</span> <span class="s1">&#39;Match&#39;</span><span class="p">]]]</span>
+<span class="n">bleu_score</span><span class="p">(</span><span class="n">candidate_corpus</span><span class="p">,</span> <span class="n">references_corpus</span><span class="p">)</span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>0.8408964276313782
+</code></pre></div>
+<h2 id="845">8.4.5 其他<a class="headerlink" href="#845" title="Permanent link">⚓︎</a></h2>
+<p>值得注意的是，由于NLP常用的网络结构比较固定，torchtext并不像torchvision那样提供一系列常用的网络结构。模型主要通过torch.nn中的模块来实现，比如torch.nn.LSTM、torch.nn.RNN等。</p>
+<p><strong>备注：</strong></p>
+<p>对于文本研究而言，当下Transformer已经成为了绝对的主流，因此PyTorch生态中的<a href="https://huggingface.co/">HuggingFace</a>等工具包也受到了越来越广泛的关注。这里强烈建议读者自行探索相关内容，可以写下自己对于HuggingFace的笔记，如果总结全面的话欢迎pull request，充实我们的课程内容。</p>
+<p><strong>本节参考</strong></p>
+<ul>
+<li><a href="https://pytorch.org/text/stable/index.html">torchtext官方文档</a></li>
+<li><a href="https://github.com/atnlp/torchtext-summary">atnlp/torchtext-summary</a></li>
+</ul>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      最后更新:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+        <br>
+        创建日期:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../8.3%20%E8%A7%86%E9%A2%91%20-%20PyTorchVideo/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 8.3 PyTorchVideo简介">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                8.3 PyTorchVideo简介
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../8.5%20%E9%9F%B3%E9%A2%91%20-%20torchaudio/" class="md-footer__link md-footer__link--next" aria-label="下一页: 8.5 torchaudio简介">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                8.5 torchaudio简介
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Ean Yang
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/YQisme" target="_blank" rel="noopener" title="github主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/244185393?spm_id_from=333.788.0.0" target="_blank" rel="noopener" title="b站主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://eanyang7.com" target="_blank" rel="noopener" title="个人主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1-96 0zm40 304v128c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9l-28.6 47.6c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352h-16z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.prune", "navigation.top", "toc.follow", "header.autohide", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.action.edit", "content.action.view", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.cd18aaf1.min.js"></script>
+      
+    
+  </body>
+</html>

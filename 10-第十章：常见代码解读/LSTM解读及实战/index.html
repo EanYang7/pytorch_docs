@@ -1,0 +1,1445 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="pytorch_docs">
+      
+      
+        <meta name="author" content="Ean Yang">
+      
+      
+        <link rel="canonical" href="https://eanyang7.github.io/pytorch_docs/10-%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E5%B8%B8%E8%A7%81%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/LSTM%E8%A7%A3%E8%AF%BB%E5%8F%8A%E5%AE%9E%E6%88%98/">
+      
+      
+        <link rel="prev" href="../10.3%20%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/">
+      
+      
+        <link rel="next" href="../RNN%E8%AF%A6%E8%A7%A3%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.jpg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.14">
+    
+    
+      
+        <title>文章结构 - pytorch 文档教程</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.fad675c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="pytorch 文档教程" class="md-header__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pytorch 文档教程
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              文章结构
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple"  aria-label="切换为暗黑模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换为暗黑模式" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="red"  aria-label="切换为浅色模式"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="切换为浅色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="分享" aria-label="分享" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pytorch 文档教程" class="md-nav__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    pytorch 文档教程
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入浅出PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../00-%E7%AC%AC%E9%9B%B6%E7%AB%A0%EF%BC%9A%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/0.1%20%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%AE%80%E5%8F%B2/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    00 第零章：前置知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../01-%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E7%AE%80%E4%BB%8B%E5%92%8C%E5%AE%89%E8%A3%85/1.1%20PyTorch%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    01 第一章：简介和安装
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../02-%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2.1%20%E5%BC%A0%E9%87%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    02 第二章：基础知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../03-%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E4%B8%BB%E8%A6%81%E7%BB%84%E6%88%90%E6%A8%A1%E5%9D%97/3.1%20%E6%80%9D%E8%80%83%EF%BC%9A%E5%AE%8C%E6%88%90%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%BF%85%E8%A6%81%E9%83%A8%E5%88%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    03 第三章：主要组成模块
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../04-%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E5%AE%9E%E6%88%98/4.1%20ResNet/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    04 第四章：基础实战
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../05-%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/5.1%20PyTorch%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E7%9A%84%E6%96%B9%E5%BC%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    05 第五章：模型定义
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../06-%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9A%E8%BF%9B%E9%98%B6%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/6.1%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    06 第六章：进阶训练技巧
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../07-%E7%AC%AC%E4%B8%83%E7%AB%A0%EF%BC%9A%E5%8F%AF%E8%A7%86%E5%8C%96/7.1%20%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    07 第七章：可视化
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../08-%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9A%E7%94%9F%E6%80%81%E7%AE%80%E4%BB%8B/8.1%20%E6%9C%AC%E7%AB%A0%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    08 第八章：生态简介
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../09-%E7%AC%AC%E4%B9%9D%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/9.1%20%E4%BD%BF%E7%94%A8ONNX%E8%BF%9B%E8%A1%8C%E9%83%A8%E7%BD%B2%E5%B9%B6%E6%8E%A8%E7%90%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    09 第九章：模型部署
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    10 第十章：常见代码解读
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            10 第十章：常见代码解读
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 图像分类简介（补充中）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.2%20%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    目标检测简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.3%20%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.3 图像分割简介（补充中）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    文章结构
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RNN%E8%AF%A6%E8%A7%A3%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文章结构
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ResNet%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ResNet源码解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Swin-Transformer%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Swin Transformer解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Transformer%20%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformer 解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ViT%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ViT解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    
+  
+  
+    <a href="../YOLO%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB/MMYOLO%E5%AE%9E%E7%8E%B0/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    YOLO系列解读
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../notebook/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Notebook
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/10-第十章：常见代码解读/LSTM解读及实战.md" title="编辑此页" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/10-第十章：常见代码解读/LSTM解读及实战.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5Z"/></svg>
+    </a>
+  
+
+
+<h1 id="_1">文章结构<a class="headerlink" href="#_1" title="Permanent link">⚓︎</a></h1>
+<p>在<a href="../RNN%E8%AF%A6%E8%A7%A3%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/">RNN详解及其实战</a>中，我们简单讨论了为什么需要RNN这类模型、RNN的具体思路、RNN的简单实现等问题。同时，在文章结尾部分我们提到了RNN存在的梯度消失问题，及之后的一个解决方案：<strong>LSTM</strong>。因此，本篇文章主要结构如下：</p>
+<ol>
+<li>LSTM 理解及简单实现</li>
+<li>LSTM 实战</li>
+<li>经典 RNN 与 LSTM 对比</li>
+<li>关于梯度消失</li>
+</ol>
+<h1 id="lstm">LSTM 理解<a class="headerlink" href="#lstm" title="Permanent link">⚓︎</a></h1>
+<p>其实，我们将 LSTM 与 RNN 说成两个并不可取， LSTM 依然归属于 RNN 之下，相比于使用线性回归方式来处理序列问题， LSTM 其实是设计了一个模块来取代线性回归算法。</p>
+<p>LSTM(Long Short-Term Memory)，翻译过来是长短期记忆法，其核心思想可以说非常的简单：既然 RNN 只能保存短期的记忆，那我增加一个长期记忆，不就可以解决这个问题了名？因此，LSTM提出了长期记忆和短期记忆，通过调整长期记忆和短期记忆之间的比例，来维持长期记忆的可靠，降低 RNN 的梯度消失问题。可以看到下方结构图中，模型输入由两个升级到三个，分别是当前节点状态 <span class="arithmatex">\(\mathbf{X}_{t}\)</span>，长期记忆：<span class="arithmatex">\(\mathbf{C}_{t-1}\)</span>，短期记忆 <span class="arithmatex">\(\mathbf{H}_{t-1}\)</span>。输出状态依然是两个：节点当前状态 <span class="arithmatex">\(\mathbf{C}_{t}\)</span>，和节点当前隐藏状态 <span class="arithmatex">\(\mathbf{H}_{t}\)</span>。</p>
+<p><img alt="LSTM结构图" src="../figures/LSTM-arch.jpg" /></p>
+<p>那么问题来了， LSTM 是如何实现对长短记忆的控制呢？
+这就不得不提众人所知的三个门：
+ - 遗忘门：控制保留多少上一时刻的单元节点到当前节点
+ - 记忆门：控制将当前时刻的多少信息记忆到节点中
+ - 输出门：控制输出多少信息给当前输出</p>
+<p>我们在分析三个门之前，我们先了解 <strong>门</strong> 这一概念。</p>
+<h2 id="_2">门<a class="headerlink" href="#_2" title="Permanent link">⚓︎</a></h2>
+<p>从简化图中可以看到， <strong>门</strong>的感觉类似于电路中的一个开关，当开关按下，信息通过，而开关抬起，信息不再通过。实际也如此类似，<strong>门</strong>是一个全连接层，输入为一个向量，输出为一个位于 [0,1] 之间的值。
+我们来设计一个非常简单的遗忘门：每次学习状态之后，都遗忘一定的已学习内容，注意，这里的遗忘门与 LSTM 的遗忘门无关，单纯理解 <strong>门</strong> 这一概念。</p>
+<p><div class="highlight"><pre><span></span><code><span class="c1"># 一个线性层 用来计算遗忘多少</span>
+<span class="n">gate_linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="c1"># 一个线性层 用来学习</span>
+<span class="n">study_linear</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="c1"># 此刻 h_t 是上一时刻状态</span>
+<span class="c1"># 输出为 0 - 1 的值</span>
+<span class="n">gate</span> <span class="o">=</span> <span class="n">gate_linear</span><span class="p">(</span><span class="n">h_t</span><span class="p">)</span>
+<span class="c1"># h_t 经过 study_linear 进行学习</span>
+<span class="n">_h_t</span> <span class="o">=</span> <span class="n">study_linear</span><span class="p">(</span><span class="n">h_t</span><span class="p">)</span>
+<span class="c1"># 在输出结果之前，经过 gate 导致内容受损，遗忘了一定的学习内容</span>
+<span class="n">h_t</span> <span class="o">=</span> <span class="n">gate</span> <span class="o">*</span> <span class="err">（</span><span class="n">_h_t</span><span class="err">）</span>
+</code></pre></div>
+可以看到，如果 <span class="arithmatex">\(gate\)</span> 值为 0，则历史信息均会被遗忘，而如果值为1，则历史信息则会被完全保留，而 <code>gate_linear</code> 网络中的超参数会不断的学习，因此一个可以学习的开关门就出现了。</p>
+<p>但是，<span class="arithmatex">\(gate\)</span> 作为一个浮点型的数据，对于 临时结果矩阵变量 <span class="arithmatex">\(\_h\_t\)</span> 而言，其遗忘控制是全局的，也就是，当 <span class="arithmatex">\(gate\)</span> 为 0 时， 其最终结果 <span class="arithmatex">\(h\_t\)</span> 为全 0 矩阵。因此我们应该注意： LSTM 中并不采用这样的大闸门，而是采用对每个变量进行分别控制的小水龙头(神经网络激活函数 <code>nn.Sigmode</code> )</p>
+<p>而在 LSTM 中，门主要使用 <span class="arithmatex">\(Sigmod\)</span> 神经网络(<strong>再次注意，并非是激活函数，而是 Sigmod 神经网络</strong>)来完成。</p>
+<p>下方是一个示例代码：
+<div class="highlight"><pre><span></span><code><span class="n">hidden_size</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="n">sigmoid</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+<span class="c1"># 隐藏状态 为了方便计算，假定全 1</span>
+<span class="n">hidden_emb</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+<span class="c1"># 中间某一层神经网络</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="err">，</span><span class="n">hidden_size</span><span class="p">)</span>
+<span class="c1"># 获取该层输出,此时尚未被门限制</span>
+<span class="n">mid_out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">hidden_emb</span><span class="p">)</span>
+<span class="c1"># 获取一个门 -- 注意：并非一定由该变量所控制</span>
+<span class="c1"># 比如：也可以由上一时刻的隐藏状态控制</span>
+<span class="c1"># 代码为： gate = sigmoid(hidden_emb)</span>
+<span class="n">gate</span> <span class="o">=</span> <span class="n">sigmoid</span><span class="p">(</span><span class="n">mid_out</span><span class="p">)</span> 
+<span class="c1"># 得到最终输出</span>
+<span class="n">final_out</span> <span class="o">=</span> <span class="n">gate</span> <span class="o">*</span> <span class="n">mid_out</span>
+</code></pre></div></p>
+<p>在有了对门的基础知识后，接下来对遗忘门、记忆门、输出门进行分别分析。</p>
+<h2 id="_3">遗忘门<a class="headerlink" href="#_3" title="Permanent link">⚓︎</a></h2>
+<p>遗忘门涉及部分如下图所示：
+ <img alt="LSTM-遗忘门" src="../figures/LSTM-gate_f.jpg" /></p>
+<p>其中，下方蓝色表示三个门共用的输入部分，均为 [<span class="arithmatex">\(\mathbf{h}_{t-1}\)</span>,<span class="arithmatex">\(\mathbf{X}_{t}\)</span>],需要注意，这里由于三个门之间并不共享权重参数，因此公示虽然接近，但是一共计算了三次，遗忘门被标记为 <span class="arithmatex">\(f_t\)</span>, 列出遗忘门公式为：
+$$
+f_t = \sigma(\mathbf{W_f} * [\mathbf{h}<em>{t-1},\mathbf{X}</em>{t}]  + \mathbf{b_f})
+$$
+输出结果为取值范围为 [ 0, 1 ] 的矩阵，主要功能是控制与之相乘的矩阵的<strong>遗忘程度</strong>。
+将 <span class="arithmatex">\(f_t\)</span> 与输入的上一长期状态 <span class="arithmatex">\(C_{t-1}\)</span> 相乘：
+$$
+C_t' = f_t * C_{t-1}
+$$</p>
+<p>一部分的 <span class="arithmatex">\(C_{t-1}\)</span> 就这样被遗忘了。</p>
+<h2 id="_4">记忆门<a class="headerlink" href="#_4" title="Permanent link">⚓︎</a></h2>
+<p>记忆门涉及部分如下所示：
+<img alt="LSTM记忆门" src="../figures/LSTM-gate_m.jpg" /></p>
+<p>从图中可以看到，记忆门中相乘的两个部分均由 <span class="arithmatex">\(\mathbf{h}_{t-1}\)</span> 与 <span class="arithmatex">\(\mathbf{X}_{t}\)</span> 得到，
+其中，左侧控制记忆多少的部分，与遗忘门公式基本一致：
+$$
+i_t = \sigma(\mathbf{W_i} * [\mathbf{h}<em>{t-1},\mathbf{X}</em>{t}]  + \mathbf{b_i})
+$$
+与遗忘门相通，输出结果为取值范围为 [ 0, 1 ] 的矩阵，主要功能是控制与之相乘的矩阵的<strong>记忆程度</strong>。
+而右侧，则更换了激活函数，由 <span class="arithmatex">\(sigmoid\)</span> 变成了 <span class="arithmatex">\(tanh\)</span>：
+$$
+\tilde{C_t} = \tanh(\mathbf{W_c} * [\mathbf{h}<em>{t-1},\mathbf{X}</em>{t}]  + \mathbf{b_c})
+$$
+该公式负责的部分可以看做负责<strong>短期隐藏状态</strong>的更新，取值范围为 [ -1, 1 ]。</p>
+<p>最终记忆门更新公式如下:
+$$
+\tilde{C_t'}=  i_t * \tilde{C_t}
+$$</p>
+<p>我们可以说  <span class="arithmatex">\(\tilde{C_t'}\)</span> 是保留了一定内容的短期状态</p>
+<h2 id="_5">状态更新<a class="headerlink" href="#_5" title="Permanent link">⚓︎</a></h2>
+<p><img alt="LSTM-状态更新" src="../figures/LSTM-update.jpg" /></p>
+<p>在通过遗忘门获取到了被遗忘一定内容的长期状态 <span class="arithmatex">\(C_t'\)</span> 和 保留了一定内容的短期状态 <span class="arithmatex">\(\tilde{C_t'}\)</span> 之后，可以通过加法直接结合</p>
+<div class="arithmatex">\[
+C_t =  C_t' + \tilde{C_t'}
+\]</div>
+<h2 id="_6">输出门<a class="headerlink" href="#_6" title="Permanent link">⚓︎</a></h2>
+<p><img alt="LSTM输出门" src="../figures/LSTM-gate_o.jpg" /></p>
+<p>输出门是三个门中最后一个门，当数据到达这里的时候，我们主要控制将长期状态中的内容 <span class="arithmatex">\(C_t\)</span> 保存一定内容到 <span class="arithmatex">\(h_t\)</span> 中，这里不再赘述
+$$
+o_t = \sigma(\mathbf{W_o} * [\mathbf{h}<em>{t-1},\mathbf{X}</em>{t}]  + \mathbf{b_o})
+$$</p>
+<div class="arithmatex">\[
+h_t = o_t * \tanh(C_t)
+\]</div>
+<h2 id="_7">模型总结<a class="headerlink" href="#_7" title="Permanent link">⚓︎</a></h2>
+<p>可以看到，所有公式的核心部分都是如此的相似：
+$$
+\mathbf{W_c} * [\mathbf{h}<em>{t-1},\mathbf{X}</em>{t}]  + \mathbf{b_c}
+$$
+而这部分其实又只是简单的线性函数，所以 LSTM 比 RNN 高级的地方其实并不在于某一条公式，而是它调整了数据之间的流动，按照一定的比例进行融合，弱化了长距离下的梯度消失问题。</p>
+<p>最后总的来看，LSTM 其实就是一个升级版本的的 RNN，他额外初始化了一个状态 <span class="arithmatex">\(C\)</span>， 用来保存长期的记忆，控制远距离上的参数权重。而输出也基本类似于此。</p>
+<h1 id="lstm_1">LSTM 实战<a class="headerlink" href="#lstm_1" title="Permanent link">⚓︎</a></h1>
+<h2 id="_8">实验说明<a class="headerlink" href="#_8" title="Permanent link">⚓︎</a></h2>
+<p>完整代码实现可以点击<a href="../../notebook/第十章%20常见网络代码的解读/LSTM实战.ipynb">这里</a>下载。在完整代码中，我们共计使用了三个模型并对比了他们的效果，三个模型分别是：由我完全使用 <code>nn.Linear</code> 实现的 LSTM 模型、 使用 <code>nn.LSTM</code> 为基础的 LSTM 模型和使用 <code>nn.RNN</code> 为基础实现的 RNN 模型。</p>
+<p>实验数据集采用 <a href="http://ai.stanford.edu/~amaas/data/sentiment/">IMDB 数据集</a>。主要由电影评论构成，长度不均，<strong>但是长度在 1000 左右的数据属于常见数据</strong>。数据集样本均衡，数共计 50000 个样本，训练和测试各有 25000 个样本，同时训练和测试的正负比例均为 1:1。</p>
+<p>根据我们对 RNN 的了解，这样的长度是很难学习到有效的知识的，所以很适合比较 RNN 与 LSTM 之间的区别。</p>
+<p>为了方便代码复现，在实现中借助了 <code>torchtext</code> 来完成数据下载及加载。</p>
+<p>为了证明模型真的有学习到一定的内容，所以对比实验中部分参数可能存在部分区别，可以在本地调整到同一参数进行细致的对比实验。</p>
+<h2 id="_9">模型实现<a class="headerlink" href="#_9" title="Permanent link">⚓︎</a></h2>
+<p>我们在这里分析一下由我实现的 LSTM 模型，并以此了解 LSTM 模型。(ps:个人能力有限,没能实现 <code>num_layers</code> 和 <code>Bi-LSTM</code> 两个特点，此外可能实现存在其他问题，欢迎给予反馈)
+<div class="highlight"><pre><span></span><code><span class="c1"># 定义基础模型</span>
+<span class="k">class</span> <span class="nc">LSTM</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        args:</span>
+<span class="sd">            input_size: 输入大小</span>
+<span class="sd">            hidden_size: 隐藏层大小</span>
+<span class="sd">            num_classes: 最后输出的类别，在这个示例中，输出应该是 0 或者 1</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">LSTM</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_size</span> <span class="o">=</span> <span class="n">input_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_layers</span> <span class="o">=</span> <span class="n">num_layers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc_i</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc_f</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc_g</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc_o</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sigmoid</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tanh</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc_out</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_size</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># 初始化隐藏状态 -- 短期记忆</span>
+        <span class="n">h_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="c1"># 初始化隐藏状态 -- 长期记忆</span>
+        <span class="n">c_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span> <span class="n">x</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">device</span><span class="p">)</span>
+        <span class="c1"># 输入与短期记忆相拼接</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">h_t</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># 记忆门 -- 输出矩阵内容为 0-1 之间的数字</span>
+        <span class="n">i_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc_i</span><span class="p">(</span><span class="n">combined</span><span class="p">))</span>
+        <span class="c1"># 遗忘门 -- 输出矩阵内容为 0-1 之间的数字</span>
+        <span class="n">f_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc_f</span><span class="p">(</span><span class="n">combined</span><span class="p">))</span>
+        <span class="c1">#</span>
+        <span class="n">g_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc_g</span><span class="p">(</span><span class="n">combined</span><span class="p">))</span>
+        <span class="c1">#  输出门 -- 输出矩阵内容为 0-1 之间的数字</span>
+        <span class="n">o_t</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sigmoid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fc_o</span><span class="p">(</span><span class="n">combined</span><span class="p">))</span>
+        <span class="c1"># 长期状态 =  遗忘门 * 上一时刻的长期状态 + 记忆门* 当前记忆状态</span>
+        <span class="n">c_t</span> <span class="o">=</span> <span class="n">f_t</span> <span class="o">*</span> <span class="n">c_t</span> <span class="o">+</span> <span class="n">i_t</span> <span class="o">*</span> <span class="n">g_t</span>
+        <span class="c1"># 隐藏状态 = 输出门 * 长期状态</span>
+        <span class="n">h_t</span> <span class="o">=</span> <span class="n">o_t</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">tanh</span><span class="p">(</span><span class="n">c_t</span><span class="p">)</span>
+        <span class="c1"># 降维操作 </span>
+        <span class="n">h_t</span> <span class="o">=</span> <span class="n">F</span><span class="o">.</span><span class="n">avg_pool2d</span><span class="p">(</span><span class="n">h_t</span><span class="p">,</span> <span class="p">(</span><span class="n">h_t</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="c1"># </span>
+        <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc_out</span><span class="p">(</span><span class="n">h_t</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span> 
+</code></pre></div></p>
+<h2 id="_10">超参数及参数说明<a class="headerlink" href="#_10" title="Permanent link">⚓︎</a></h2>
+<h3 id="mylstm-nnlstm">MyLSTM 与 nn.LSTM<a class="headerlink" href="#mylstm-nnlstm" title="Permanent link">⚓︎</a></h3>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>learning_rate</td>
+<td>0.001</td>
+</tr>
+<tr>
+<td>batch_size</td>
+<td>32</td>
+</tr>
+<tr>
+<td>epoch</td>
+<td>6(3)</td>
+</tr>
+<tr>
+<td>input_size</td>
+<td>64</td>
+</tr>
+<tr>
+<td>hidden_size</td>
+<td>128</td>
+</tr>
+<tr>
+<td>num_classes</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>此时：
+MyLSTM 参数量: 99074
+nn.LSTM 参数量: 99328</p>
+<p>由于我实现的 MyLSTM 与 nn.LSTM 有 254 的参数差，我本人并没能分析出来差别。 <code>nn.LSTM</code> 在实验时大概率比我的 MyLSTM 迭代更快，所以容易较早的过拟合，所以将其训练 epoch 砍半，也就是说 MyLSTM 使用 6 epoch 进行训练，而 <code>nn.LSTM</code> 使用 3 epoch 进行训练。两者可以达到基本相近的效果</p>
+<p>另外在代码实现中 <code>nn.LSTM</code> 后面加了一个 <code>nn.Linear</code> 来实现二分类，参数量为 258， 所以 MyLSTM 和 LSTM 相差参数总量为 512。</p>
+<h3 id="nnrnn">nn.RNN<a class="headerlink" href="#nnrnn" title="Permanent link">⚓︎</a></h3>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>learning_rate</td>
+<td><strong>0.0001</strong></td>
+</tr>
+<tr>
+<td>batch_size</td>
+<td>32</td>
+</tr>
+<tr>
+<td>epoch</td>
+<td><strong>12-18</strong></td>
+</tr>
+<tr>
+<td>input_size</td>
+<td>64</td>
+</tr>
+<tr>
+<td>hidden_size</td>
+<td>128</td>
+</tr>
+<tr>
+<td>num_classes</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+<p>此时：
+nn.RNN 参数量: 25090</p>
+<p>由于实验样本长度在 1000 上下， RNN 显示出来了极大的不稳定性，其中， 相较于 LSTM 更容易梯度爆炸、训练 epoch 更多、学习率需要调低等等问题，尽管如此依然不能保证稳定的良好结果。</p>
+<p>举例来说，某学生学习阅读理解，要求根据文章内容回答文章的情感倾向，但是学生只喜欢看最后一句话，每次都根据最后一句话来回答问题，那么他基本上是等于瞎猜的，只能学到一点浅薄的知识。</p>
+<h2 id="_11">实验结果<a class="headerlink" href="#_11" title="Permanent link">⚓︎</a></h2>
+<table>
+<thead>
+<tr>
+<th>MyLSTM</th>
+<th>nn.LSTM</th>
+<th>nn.RNN</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.86</td>
+<td>0.80</td>
+<td>0.67</td>
+</tr>
+</tbody>
+</table>
+<h1 id="_12">关于梯度问题<a class="headerlink" href="#_12" title="Permanent link">⚓︎</a></h1>
+<ul>
+<li>
+<p>RNN问题中，<strong>总的梯度是不会消失的</strong>。即便梯度越传越弱，那也是远处的梯度逐渐消失，而近距离的梯度不会消失，因此，梯度总和不会消失。RNN 梯度消失的真正含义是：梯度被近距离梯度所主导，导致模型难以学到远距离的依赖关系。</p>
+</li>
+<li>
+<p>LSTM 上有多条信息流路径，其中，<strong>元素相加的路径的梯度流是最稳定的</strong>，而其他路径上与基本的 RNN 相类似，依然存在反复相乘问题。</p>
+</li>
+<li>
+<p>LSTM 刚刚提出时不存在遗忘门。这时候历史数据可以在这条路径上无损的传递，可以将其视为一条 <strong>高速公路</strong>，类似于 ResNet 中的残差连接。</p>
+</li>
+<li>
+<p>但是其他路径上， LSTM 与 RNN 并无太多区别，依然会爆炸或者消失。由于<strong>总的远距离梯度 = 各个路径的远距离梯度之和</strong>，因此只要有一条路的远距离梯度没有消失，总的远距离梯度就不会消失。可以说，LSTM 通过这一条路拯救了总的远距离梯度。</p>
+</li>
+<li>
+<p>同样，<strong>总的远距离梯度 = 各个路径的远距离梯度之和</strong>，虽然高速路上的梯度流比较稳定，但是其他路上依然存在梯度消失和梯度爆炸问题。因此，总的远距离梯度 = 正常梯度 + 爆炸梯度 = 爆炸梯度，因此 LSTM 依然存在梯度爆炸问题。 但是由于 LSTM 的道路相比经典 RNN 来说非常崎岖， 存在多次激活函数，因此 LSTM 发生梯度爆炸的概率要小得多。实践中通常通过梯度剪裁来优化问题。</p>
+</li>
+</ul>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      最后更新:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+        <br>
+        创建日期:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../10.3%20%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 10.3 图像分割简介（补充中）">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                10.3 图像分割简介（补充中）
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../RNN%E8%AF%A6%E8%A7%A3%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/" class="md-footer__link md-footer__link--next" aria-label="下一页: 文章结构">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                文章结构
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Ean Yang
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/YQisme" target="_blank" rel="noopener" title="github主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/244185393?spm_id_from=333.788.0.0" target="_blank" rel="noopener" title="b站主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://eanyang7.com" target="_blank" rel="noopener" title="个人主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1-96 0zm40 304v128c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9l-28.6 47.6c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352h-16z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.prune", "navigation.top", "toc.follow", "header.autohide", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.action.edit", "content.action.view", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.cd18aaf1.min.js"></script>
+      
+    
+  </body>
+</html>

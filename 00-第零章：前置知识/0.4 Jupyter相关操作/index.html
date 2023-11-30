@@ -1,0 +1,1676 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="pytorch_docs">
+      
+      
+        <meta name="author" content="Ean Yang">
+      
+      
+        <link rel="canonical" href="https://eanyang7.github.io/pytorch_docs/00-%E7%AC%AC%E9%9B%B6%E7%AB%A0%EF%BC%9A%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/0.4%20Jupyter%E7%9B%B8%E5%85%B3%E6%93%8D%E4%BD%9C/">
+      
+      
+        <link rel="prev" href="../0.3%20%E5%B8%B8%E7%94%A8%E5%8C%85%E7%9A%84%E5%AD%A6%E4%B9%A0/">
+      
+      
+        <link rel="next" href="../../01-%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E7%AE%80%E4%BB%8B%E5%92%8C%E5%AE%89%E8%A3%85/1.1%20PyTorch%E7%AE%80%E4%BB%8B/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.jpg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.14">
+    
+    
+      
+        <title>Jupyter notebook/Lab 简述 - pytorch 文档教程</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.fad675c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#jupyter-notebooklab" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="pytorch 文档教程" class="md-header__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pytorch 文档教程
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Jupyter notebook/Lab 简述
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple"  aria-label="切换为暗黑模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换为暗黑模式" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="red"  aria-label="切换为浅色模式"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="切换为浅色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="分享" aria-label="分享" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pytorch 文档教程" class="md-nav__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    pytorch 文档教程
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入浅出PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    00 第零章：前置知识
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            00 第零章：前置知识
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0.1%20%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%AE%80%E5%8F%B2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    人工智能简史
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0.2%20%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    模型评价指标
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0.3%20%E5%B8%B8%E7%94%A8%E5%8C%85%E7%9A%84%E5%AD%A6%E4%B9%A0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    常用包的学习
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Jupyter notebook/Lab 简述
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Jupyter notebook/Lab 简述
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-jupyter-notebooklab" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 Jupyter Notebook/Lab安装
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-jupyter-notebooklab" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 Jupyter Notebook/Lab配置
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 Jupyter Notebook/Lab配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 设置文件存放位置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 使用虚拟环境
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-jupyter-notebooklab" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 Jupyter Notebook\Lab基本操作
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3 Jupyter Notebook\Lab基本操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1 基本使用
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 基本使用">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#311-jupyter-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.1 Jupyter Notebook
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#312-jupyter-lab" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.2 Jupyter Lab
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2 常用快捷键
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.3 安装插件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 进阶操作
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 参考资料
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../01-%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E7%AE%80%E4%BB%8B%E5%92%8C%E5%AE%89%E8%A3%85/1.1%20PyTorch%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    01 第一章：简介和安装
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../02-%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2.1%20%E5%BC%A0%E9%87%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    02 第二章：基础知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../03-%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E4%B8%BB%E8%A6%81%E7%BB%84%E6%88%90%E6%A8%A1%E5%9D%97/3.1%20%E6%80%9D%E8%80%83%EF%BC%9A%E5%AE%8C%E6%88%90%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%BF%85%E8%A6%81%E9%83%A8%E5%88%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    03 第三章：主要组成模块
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../04-%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E5%AE%9E%E6%88%98/4.1%20ResNet/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    04 第四章：基础实战
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../05-%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/5.1%20PyTorch%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E7%9A%84%E6%96%B9%E5%BC%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    05 第五章：模型定义
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../06-%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9A%E8%BF%9B%E9%98%B6%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/6.1%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    06 第六章：进阶训练技巧
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../07-%E7%AC%AC%E4%B8%83%E7%AB%A0%EF%BC%9A%E5%8F%AF%E8%A7%86%E5%8C%96/7.1%20%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    07 第七章：可视化
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../08-%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9A%E7%94%9F%E6%80%81%E7%AE%80%E4%BB%8B/8.1%20%E6%9C%AC%E7%AB%A0%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    08 第八章：生态简介
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../09-%E7%AC%AC%E4%B9%9D%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/9.1%20%E4%BD%BF%E7%94%A8ONNX%E8%BF%9B%E8%A1%8C%E9%83%A8%E7%BD%B2%E5%B9%B6%E6%8E%A8%E7%90%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    09 第九章：模型部署
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../10-%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E5%B8%B8%E8%A7%81%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/10.1%20%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    10 第十章：常见代码解读
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../notebook/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Notebook
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-jupyter-notebooklab" class="md-nav__link">
+    <span class="md-ellipsis">
+      1 Jupyter Notebook/Lab安装
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-jupyter-notebooklab" class="md-nav__link">
+    <span class="md-ellipsis">
+      2 Jupyter Notebook/Lab配置
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2 Jupyter Notebook/Lab配置">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.1 设置文件存放位置
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      2.2 使用虚拟环境
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-jupyter-notebooklab" class="md-nav__link">
+    <span class="md-ellipsis">
+      3 Jupyter Notebook\Lab基本操作
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3 Jupyter Notebook\Lab基本操作">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1 基本使用
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.1 基本使用">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#311-jupyter-notebook" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.1 Jupyter Notebook
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#312-jupyter-lab" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.1.2 Jupyter Lab
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.2 常用快捷键
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33" class="md-nav__link">
+    <span class="md-ellipsis">
+      3.3 安装插件
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4" class="md-nav__link">
+    <span class="md-ellipsis">
+      4 进阶操作
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      5 参考资料
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/00-第零章：前置知识/0.4 Jupyter相关操作.md" title="编辑此页" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/00-第零章：前置知识/0.4 Jupyter相关操作.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5Z"/></svg>
+    </a>
+  
+
+
+<h1 id="jupyter-notebooklab">Jupyter notebook/Lab 简述<a class="headerlink" href="#jupyter-notebooklab" title="Permanent link">⚓︎</a></h1>
+<p>在数据科学，机器学习，深度学习中，我们希望即时进行图像的可视化和函数的计算，基于这种需求，人们开发出了基于网页的用于交互计算的应用程序Jupyter Notebook。在我们的教程代码也是基于Jupyter notebook。除此之外，它们可被应用于全过程计算：开发、文档编写、运行代码和展示结果。在Jupyter Notebook中编写的文档保存为<code>.ipynb</code>的<code>JSON</code>格式文件，文档可以导出为HTML、LaTeX、markdown、PDF等格式。Jupyter Notebook的主要特点有：</p>
+<ul>
+<li>
+<p>编程时具有<strong>语法高亮</strong>、<em>缩进</em>、<em>tab补全</em>的功能。</p>
+</li>
+<li>
+<p>可直接通过浏览器运行代码，同时在代码块下方展示运行结果。</p>
+</li>
+<li>
+<p>以富媒体格式展示计算结果。富媒体格式包括：HTML，LaTeX，PNG，SVG等。</p>
+</li>
+<li>
+<p>对代码编写说明文档或语句时，支持Markdown语法。</p>
+</li>
+<li>
+<p>支持使用LaTeX编写数学性说明。</p>
+</li>
+</ul>
+<p>除此之外，好用的Jupyter Notebook还有个“双胞胎”——Jupyter Lab。Jupyter Lab是基于Web的集成开发环境，可以把它当作进化版的Jupyter Notebook。使用Jupyter Lab可以同时在一个浏览器页面打开编辑多个Notebook、Ipython console和terminal终端，甚至可以使用Jupyter Lab连接Google Drive等服务。由于Jupyter Lab拥有模块化结构，提供更多类似IDE的体验，已经有越来越多的人从使用Jupyter Notebook转向使用Jupyter Lab。</p>
+<p>[* ]通过本章学习，你将收获：</p>
+<ul>
+<li>安装和配置Jupyter Notebook和Jupyter Lab的方法</li>
+<li>Jupyter Notebook的基本操作和快捷键</li>
+<li>使用Jupyter Notebook编写代码的方式</li>
+<li>了解Jupyter Notebook的Bash命令和魔术命令</li>
+<li>为Jupyter Notebook安装拓展插件的方法</li>
+</ul>
+<h2 id="1-jupyter-notebooklab">1 Jupyter Notebook/Lab安装<a class="headerlink" href="#1-jupyter-notebooklab" title="Permanent link">⚓︎</a></h2>
+<ol>
+<li>
+<p>安装Jupyter Notebook：激活虚拟环境后，我们只需要在终端输入指令</p>
+<div class="highlight"><pre><span></span><code><span class="n">conda</span> <span class="n">install</span> <span class="n">jupyter</span> <span class="n">notebook</span>
+<span class="c1"># pip install jupyter notebook</span>
+</code></pre></div>
+</li>
+<li>
+<p>注：如果pip版本过低，还需提前运行更新pip的指令</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">pip</span> <span class="n">install</span> <span class="o">--</span><span class="n">upgrade</span> <span class="n">pip</span>
+</code></pre></div>
+<ol>
+<li>安装Jupyter Lab：激活环境后，我们同样也只需要在终端输入指令</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">jupyterlab</span>
+<span class="c1"># pip install jupyterlab</span>
+</code></pre></div>
+<ol>
+<li>在终端输入指令打开Jupyter Notebook</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">jupyter</span> <span class="n">notebook</span>  <span class="c1"># 打开Jupyter Notebook</span>
+<span class="n">jupyter</span> <span class="n">lab</span>  <span class="c1"># 打开Jupyter Lab</span>
+</code></pre></div>
+<ul>
+<li>如果浏览器没有自动打开Jupyter Notebook或者Jupyter Lab，复制端口信息粘贴至浏览器打开</li>
+</ul>
+<p><img alt="image-20220812162810305" src="../figures/image-20220812162810305.png" /></p>
+<ul>
+<li>如果想要自定义端口，在终端输入如下指令修改</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">jupyter</span> <span class="n">notebook</span> <span class="o">--</span><span class="n">port</span> <span class="o">&lt;</span><span class="n">port_number</span><span class="o">&gt;</span>
+</code></pre></div>
+<ul>
+<li>如果想启动服务器但不打开浏览器，可以在终端输入</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">jupyter</span> <span class="n">notebook</span> <span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">browser</span>
+</code></pre></div>
+<h2 id="2-jupyter-notebooklab">2 Jupyter Notebook/Lab配置<a class="headerlink" href="#2-jupyter-notebooklab" title="Permanent link">⚓︎</a></h2>
+<h3 id="21">2.1 设置文件存放位置<a class="headerlink" href="#21" title="Permanent link">⚓︎</a></h3>
+<p>​   在使用Jupyter Notebook/Jupyter Lab时，如果我们想要更改默认文件存放路径，该怎么办？</p>
+<ul>
+<li>
+<p>Jupyter Notebook</p>
+</li>
+<li>
+<p>我们首先需要查看配置文件，只需要在终端输入</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">jupyter</span> <span class="n">notebook</span> <span class="o">--</span><span class="n">generate</span><span class="o">-</span><span class="n">config</span>
+</code></pre></div>
+<ol>
+<li>我们记住出现配置文件的路径，复制到文件夹中打开（终端这里可以写N）</li>
+</ol>
+<p><img src="figures/image-20220716235510697.png" alt="image-20220716235510697" style="zoom:50%;" /></p>
+<ol>
+<li>在文件夹中双击打开配置文件</li>
+</ol>
+<p><img src="figures/image-20220716235540827.png" alt="image-20220716235540827" style="zoom:50%;" /></p>
+<ol>
+<li>
+<p>打开Python文件后，用<code>Ctrl+F</code>快捷键查找，输入关键词，找到<code># c.NotebookApp.notebook_dir = ''</code></p>
+</li>
+<li>
+<p>去掉注释，并填充路径<code>c.NotebookApp.notebook_dir = 'D:\\Adatascience'</code></p>
+</li>
+</ol>
+<p><img src="figures/image-20220804170455298.png" alt="image-20220804170455298" style="zoom:50%;" /></p>
+<ol>
+<li>此时我们在终端中输入<code>jupyter notebook</code>，打开页面后发现文件默认路径已经被更改。但是点击菜单栏中的应用快捷方式打开Jupyter Notebook，打开页面发现文件位置仍然是默认路径</li>
+</ol>
+<p><img src="figures/image-20220716235931573.png" alt="image-20220716235931573" style="zoom:25%;" /></p>
+<ol>
+<li>如果我们想要更改应用快捷方式Jupyter Notebook的文件位置，此时需要右键选中快捷方式，打开文件所在位置。再右键点击快捷方式，查看属性，再点击快捷方式</li>
+</ol>
+<p><img src="figures/image-20220717000530228.png" alt="image-20220717000530228" style="zoom:25%;" /></p>
+<p><img src="figures/image-20220804171027983.png" alt="image-20220804171027983" style="zoom: 25%;" /></p>
+<ol>
+<li>我们只需要在“目标”中删除红框标记部分，点击确定</li>
+</ol>
+<p><img src="figures/image-20220717001243904.png" alt="image-20220717001243904" style="zoom:50%;" /></p>
+<ol>
+<li>
+<p>此时再打开菜单栏中Jupyter Notebook的快捷方式，发现页面文件路径已经变为之前自主设置的路径啦！</p>
+</li>
+<li>
+<p>Jupyter Lab的修改操作和Jupyter Notebook流程相似，但是在细节上有些不同</p>
+</li>
+<li>
+<p>同样我们还是首先需要查看配置文件，在终端输入</p>
+</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">jupyter</span> <span class="n">lab</span> <span class="o">--</span><span class="n">generate</span><span class="o">-</span><span class="n">config</span>
+</code></pre></div>
+<ol>
+<li>
+<p>找到配置文件所在的文件夹，打开配置文件</p>
+</li>
+<li>
+<p>修改配置文件时，用<code>Ctrl+F</code>快捷键查找，输入关键词，找到<code># c.ServerApp.notebook_dir</code>，去掉注释。改为<code>c.ServerApp.notebook_dir = 'D:\\Adatascience（这里填自己想改的文件路径）'</code></p>
+</li>
+<li>
+<p>之后的步骤和Jupyter Notebook修改配置文件的第七至第十步相同</p>
+</li>
+</ol>
+<h3 id="22">2.2 使用虚拟环境<a class="headerlink" href="#22" title="Permanent link">⚓︎</a></h3>
+<p>​       需要注意的是，Anaconda安装的虚拟环境和Jupyter Notebook运行需要的Kernel并不互通。那么我们该如何解决这个问题，并且如果我们想要切换内核（Change Kernel），该如何操作呢？</p>
+<ol>
+<li>将在Anaconda中创建的虚拟环境添加<code>ipykernel</code></li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># 如果还没创建环境，在创建时要加上ipykernel</span>
+<span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">env_name</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.8</span> <span class="n">ipykernel</span>
+<span class="c1"># 如果已经创建环境，在环境中安装ipykernel</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">ipykernel</span>
+</code></pre></div>
+<ol>
+<li>将虚拟环境写进Jupyter</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">python</span> <span class="o">-</span><span class="n">m</span> <span class="n">ipykernel</span> <span class="n">install</span> <span class="o">--</span><span class="n">user</span> <span class="o">--</span><span class="n">name</span> <span class="n">env_name</span> <span class="o">--</span><span class="n">display</span><span class="o">-</span><span class="n">name</span> <span class="s2">&quot;env_name&quot;</span>
+</code></pre></div>
+<ol>
+<li>在<code>Kernel</code>中更换添加的虚拟环境即可</li>
+</ol>
+<p><img src="figures/image-20220812171025719.png" alt="image-20220812171025719" style="zoom:25%;" /></p>
+<h2 id="3-jupyter-notebooklab">3 Jupyter Notebook\Lab基本操作<a class="headerlink" href="#3-jupyter-notebooklab" title="Permanent link">⚓︎</a></h2>
+<h3 id="31">3.1 基本使用<a class="headerlink" href="#31" title="Permanent link">⚓︎</a></h3>
+<h4 id="311-jupyter-notebook">3.1.1 Jupyter Notebook<a class="headerlink" href="#311-jupyter-notebook" title="Permanent link">⚓︎</a></h4>
+<ol>
+<li>创建文件：点击右上角New，选择Notebook；创建文件夹：点击右上角New，选择Folder</li>
+</ol>
+<p><img src="figures/image-20220805024106987.png" alt="image-20220805024106987" style="zoom:25%;" /></p>
+<ol>
+<li>删除文件：点击文件前的方框，再点击删除图标</li>
+</ol>
+<p><img src="figures/image-20220805030406608.png" alt="image-20220805030406608" style="zoom: 25%;" /></p>
+<ol>
+<li>重命名文件：当文件在运行时（即文件前图标为绿色），需要先点击“Shutdown”（关闭终端），再点击“Rename”</li>
+</ol>
+<p><img src="figures/image-20220805031209481.png" alt="image-20220805031209481" style="zoom:25%;" /></p>
+<ol>
+<li>重命名文件夹：点击文件夹前的方框，再点击“Rename”</li>
+<li>复制（Duplicate）、移动（Move）、下载（Download）、查看（View）等操作，同样可以点击文件前的方框，再点上方的图标进行操作</li>
+</ol>
+<h4 id="312-jupyter-lab">3.1.2 Jupyter Lab<a class="headerlink" href="#312-jupyter-lab" title="Permanent link">⚓︎</a></h4>
+<ol>
+<li>红框内按钮从左到右分别是新建文件、新建文件夹、上传文件和刷新</li>
+</ol>
+<p><img alt="image-20220805033034092" src="../figures/image-20220805033034092.png" /></p>
+<ol>
+<li>
+<p>上传多个文件的方法：</p>
+</li>
+<li>
+<p>将文件打包成一个zip压缩包</p>
+</li>
+<li>上传该压缩包</li>
+<li>解压文件<code>!unzip (压缩包所在路径) -d (解压路径)</code>，例如：<code>!unzip coco.zip -d data/coco</code></li>
+<li>删除该压缩包</li>
+</ol>
+<h3 id="32">3.2 常用快捷键<a class="headerlink" href="#32" title="Permanent link">⚓︎</a></h3>
+<ol>
+<li>入门操作</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="c1"># 增加，减少，剪切，保存，删除等</span>
+<span class="c1"># a, b, x, s, dd</span>
+
+<span class="c1"># 合并，执行本单元代码，并跳转到下一单元，执行本单元代码，留在本单元</span>
+<span class="c1"># Shift+M Shift+Enter Ctrl+Enter</span>
+
+<span class="c1"># 显示行数，切换markdown/code</span>
+<span class="c1"># l, m/y</span>
+</code></pre></div>
+<ol>
+<li>
+<p>Jupyter Notebook中按下Enter进入编辑模式，按下Esc进入命令模式</p>
+</li>
+<li>
+<p><strong>编辑模式（绿色）</strong></p>
+</li>
+</ol>
+<p><img alt="image-20220805144702521" src="../figures/image-20220805144702521.png" /></p>
+<ul>
+<li><strong>命令模式（蓝色）</strong></li>
+</ul>
+<p><img alt="image-20220805144722375" src="../figures/image-20220805144722375.png" /></p>
+<ul>
+<li>在命令模式下，点击h，会弹出快捷键窗口</li>
+</ul>
+<p><img src="figures/image-20220805144803441.png" alt="image-20220805144803441" style="zoom:25%;" /></p>
+<ol>
+<li>
+<p>Jupyter Lab同样有两种模式。按下Enter进入编辑模式，按下Esc进入命令模式</p>
+</li>
+<li>
+<p>编辑模式（有框线无光标）</p>
+</li>
+</ol>
+<p><img alt="image-20220805145218241" src="../figures/image-20220805145218241.png" /></p>
+<ul>
+<li>命令模式（无框线无光标）</li>
+</ul>
+<p><img alt="image-20220805150721875" src="../figures/image-20220805150721875.png" /></p>
+<ul>
+<li>
+<p>快捷键操作与Jupyter Notebook基本相同，可参考上一部分</p>
+</li>
+<li>
+<p>快捷键汇总</p>
+</li>
+</ul>
+<p>​           命令模式（按<code>Esc</code>）</p>
+<ul>
+<li><strong>Enter</strong> : 转入编辑模式</li>
+<li><strong>Shift-Enter</strong> : 运行本单元，选中下个单元</li>
+<li><strong>Ctrl-Enter</strong> : 运行本单元</li>
+<li><strong>Alt-Enter</strong> : 运行本单元，在其下插入新单元</li>
+<li><strong>Y</strong> : 单元转入代码状态</li>
+<li><strong>M</strong> :单元转入markdown状态</li>
+<li><strong>R</strong> : 单元转入raw状态</li>
+<li><strong>1</strong> : 设定 1 级标题</li>
+<li><strong>2</strong> : 设定 2 级标题</li>
+<li><strong>3</strong> : 设定 3 级标题</li>
+<li><strong>4</strong> : 设定 4 级标题</li>
+<li><strong>5</strong> : 设定 5 级标题</li>
+<li><strong>6</strong> : 设定 6 级标题</li>
+<li><strong>Up</strong> : 选中上方单元</li>
+<li><strong>K</strong> : 选中上方单元</li>
+<li><strong>Down</strong> : 选中下方单元</li>
+<li><strong>J</strong> : 选中下方单元</li>
+<li><strong>Shift-K</strong> : 扩大选中上方单元</li>
+<li><strong>Shift-J</strong> : 扩大选中下方单元</li>
+<li><strong>A</strong> : 在上方插入新单元</li>
+<li><strong>B</strong> : 在下方插入新单元</li>
+<li><strong>X</strong> : 剪切选中的单元</li>
+<li><strong>C</strong> : 复制选中的单元</li>
+<li><strong>Shift-V</strong> : 粘贴到上方单元</li>
+<li><strong>V</strong> : 粘贴到下方单元</li>
+<li><strong>Z</strong> : 恢复删除的最后一个单元</li>
+<li><strong>D,D</strong> : 删除选中的单元</li>
+<li><strong>Shift-M</strong> : 合并选中的单元</li>
+<li><strong>Ctrl-S</strong> : 文件存盘</li>
+<li><strong>S</strong> : 文件存盘</li>
+<li><strong>L</strong> : 转换行号</li>
+<li><strong>O</strong> : 转换输出</li>
+<li><strong>Shift-O</strong> : 转换输出滚动</li>
+<li><strong>Esc</strong> : 关闭页面</li>
+<li><strong>Q</strong> : 关闭页面</li>
+<li><strong>H</strong> : 显示快捷键帮助</li>
+<li><strong>I,I</strong> : 中断Notebook内核</li>
+<li><strong>0,0</strong> : 重启Notebook内核</li>
+<li><strong>Shift</strong> : 忽略</li>
+<li><strong>Shift-Space</strong> : 向上滚动</li>
+<li><strong>Space</strong> : 向下滚动</li>
+</ul>
+<p>​       编辑模式（按<code>Enter</code>）</p>
+<ul>
+<li><strong>Tab</strong> : 代码补全或缩进</li>
+<li><strong>Shift-Tab</strong> : 提示</li>
+<li><strong>Ctrl-]</strong> : 缩进</li>
+<li><strong>Ctrl-[</strong> : 解除缩进</li>
+<li><strong>Ctrl-A</strong> : 全选</li>
+<li><strong>Ctrl-Z</strong> : 复原</li>
+<li><strong>Ctrl-Shift-Z</strong> : 再做</li>
+<li><strong>Ctrl-Y</strong> : 再做</li>
+<li><strong>Ctrl-Home</strong> : 跳到单元开头</li>
+<li><strong>Ctrl-Up</strong> : 跳到单元开头</li>
+<li><strong>Ctrl-End</strong> : 跳到单元末尾</li>
+<li><strong>Ctrl-Down</strong> : 跳到单元末尾</li>
+<li><strong>Ctrl-Left</strong> : 跳到左边一个字首</li>
+<li><strong>Ctrl-Right</strong> : 跳到右边一个字首</li>
+<li><strong>Ctrl-Backspace</strong> : 删除前面一个字</li>
+<li><strong>Ctrl-Delete</strong> : 删除后面一个字</li>
+<li><strong>Esc</strong> : 进入命令模式</li>
+<li><strong>Ctrl-M</strong> : 进入命令模式</li>
+<li><strong>Shift-Enter</strong> : 运行本单元，选中下一单元</li>
+<li><strong>Ctrl-Enter</strong> : 运行本单元</li>
+<li><strong>Alt-Enter</strong> : 运行本单元，在下面插入一单元</li>
+<li><strong>Ctrl-Shift--</strong> : 分割单元</li>
+<li><strong>Ctrl-Shift-Subtract</strong> : 分割单元</li>
+<li><strong>Ctrl-S</strong> : 文件存盘</li>
+<li><strong>Shift</strong> : 忽略</li>
+<li><strong>Up</strong> : 光标上移或转入上一单元</li>
+<li><strong>Down</strong> :光标下移或转入下一单元</li>
+</ul>
+<h3 id="33">3.3 安装插件<a class="headerlink" href="#33" title="Permanent link">⚓︎</a></h3>
+<ul>
+<li>
+<p>Jupyter Notebook安装插件的方法</p>
+</li>
+<li>
+<p>在Anaconda Powershell Prompt中输入</p>
+</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="n">pip</span> <span class="n">install</span> <span class="n">jupyter_contrib_nbextensions</span>
+</code></pre></div>
+<ol>
+<li>再次输入以下指令，将插件添加到工具栏</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">jupyter</span> <span class="n">contrib</span> <span class="n">nbextension</span> <span class="n">install</span>
+</code></pre></div>
+<ol>
+<li>打开Jupyter Notebook，点击Nbextensions，取消勾选<code>disable configuration for nbextensions without explicit compatibility</code>，此时可以添加自己喜欢的插件啦！</li>
+</ol>
+<p><img src="figures/image-20220805151600140.png" alt="image-20220805151600140" style="zoom:25%;" /></p>
+<ol>
+<li>
+<p>推荐以下两个基础插件</p>
+</li>
+<li>
+<p>Execute Time：可以显示执行一个Cell要花费多少时间</p>
+</li>
+<li>
+<p>Hinterland：提供代码补全功能</p>
+</li>
+<li>
+<p>Jupyter Lab安装插件的方法</p>
+</li>
+<li>
+<p>Jupyter Lab安装插件点击左侧的第四个标志，点击“Enable”后就可以在搜索栏中搜索想要的插件</p>
+</li>
+</ol>
+<p><img src="figures/image-20220805152331777.png" alt="image-20220805152331777" style="zoom:25%;" /></p>
+<ol>
+<li>例如搜索<code>jupyterlab-execute-time</code>后，在Search Results中查看结果，点击Install便可安装插件</li>
+</ol>
+<p><img src="figures/image-20220805152507891.png" alt="image-20220805152507891" style="zoom:25%;" /></p>
+<ol>
+<li>还可以在Anaconda Powershell Prompt中使用指令来安装插件</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="n">jupyter</span> <span class="n">labextension</span> <span class="n">install</span> <span class="n">jupyterlab</span><span class="o">-</span><span class="n">execute</span><span class="o">-</span><span class="n">time</span>  <span class="c1"># 安装jupyterlab-execute-time</span>
+</code></pre></div>
+<h2 id="4">4 进阶操作<a class="headerlink" href="#4" title="Permanent link">⚓︎</a></h2>
+<p>​       除了以上操作，Jupyter Notebook还有许多丰富的内容等待大家探索。如Bash命令、魔术命令等。我们为大家提供了一份在Notebook中编写的进阶操作，快来试试看吧~</p>
+<p>​       <a href="https://github.com/datawhalechina/thorough-pytorch/blob/main/notebook/%E7%AC%AC%E9%9B%B6%E7%AB%A0%20%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%E8%A1%A5%E5%85%85/%E8%BF%9B%E9%98%B6%E6%93%8D%E4%BD%9C.ipynb">点击查看进阶教程</a></p>
+<h2 id="5">5 参考资料<a class="headerlink" href="#5" title="Permanent link">⚓︎</a></h2>
+<p>【1】<a href="https://zhuanlan.zhihu.com/p/33105153">Jupyter Notebook介绍、安装及使用教程 - 知乎 (zhihu.com)</a></p>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      最后更新:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+        <br>
+        创建日期:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../0.3%20%E5%B8%B8%E7%94%A8%E5%8C%85%E7%9A%84%E5%AD%A6%E4%B9%A0/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 常用包的学习">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                常用包的学习
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../../01-%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E7%AE%80%E4%BB%8B%E5%92%8C%E5%AE%89%E8%A3%85/1.1%20PyTorch%E7%AE%80%E4%BB%8B/" class="md-footer__link md-footer__link--next" aria-label="下一页: 1.1 PyTorch简介">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                1.1 PyTorch简介
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Ean Yang
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/YQisme" target="_blank" rel="noopener" title="github主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/244185393?spm_id_from=333.788.0.0" target="_blank" rel="noopener" title="b站主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://eanyang7.com" target="_blank" rel="noopener" title="个人主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1-96 0zm40 304v128c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9l-28.6 47.6c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352h-16z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.prune", "navigation.top", "toc.follow", "header.autohide", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.action.edit", "content.action.view", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.cd18aaf1.min.js"></script>
+      
+    
+  </body>
+</html>

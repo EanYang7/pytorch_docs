@@ -1,0 +1,1843 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="pytorch_docs">
+      
+      
+        <meta name="author" content="Ean Yang">
+      
+      
+        <link rel="canonical" href="https://eanyang7.github.io/pytorch_docs/10-%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E5%B8%B8%E8%A7%81%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/ViT%E8%A7%A3%E8%AF%BB/">
+      
+      
+        <link rel="prev" href="../Transformer%20%E8%A7%A3%E8%AF%BB/">
+      
+      
+        <link rel="next" href="../YOLO%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB/MMYOLO%E5%AE%9E%E7%8E%B0/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.jpg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.14">
+    
+    
+      
+        <title>ViT解读 - pytorch 文档教程</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.fad675c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#vit" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="pytorch 文档教程" class="md-header__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pytorch 文档教程
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              ViT解读
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple"  aria-label="切换为暗黑模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换为暗黑模式" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="red"  aria-label="切换为浅色模式"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="切换为浅色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="分享" aria-label="分享" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pytorch 文档教程" class="md-nav__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    pytorch 文档教程
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入浅出PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../00-%E7%AC%AC%E9%9B%B6%E7%AB%A0%EF%BC%9A%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/0.1%20%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%AE%80%E5%8F%B2/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    00 第零章：前置知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../01-%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E7%AE%80%E4%BB%8B%E5%92%8C%E5%AE%89%E8%A3%85/1.1%20PyTorch%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    01 第一章：简介和安装
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../02-%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2.1%20%E5%BC%A0%E9%87%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    02 第二章：基础知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../03-%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E4%B8%BB%E8%A6%81%E7%BB%84%E6%88%90%E6%A8%A1%E5%9D%97/3.1%20%E6%80%9D%E8%80%83%EF%BC%9A%E5%AE%8C%E6%88%90%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%BF%85%E8%A6%81%E9%83%A8%E5%88%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    03 第三章：主要组成模块
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../04-%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E5%AE%9E%E6%88%98/4.1%20ResNet/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    04 第四章：基础实战
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../05-%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/5.1%20PyTorch%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E7%9A%84%E6%96%B9%E5%BC%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    05 第五章：模型定义
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../06-%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9A%E8%BF%9B%E9%98%B6%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/6.1%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    06 第六章：进阶训练技巧
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../07-%E7%AC%AC%E4%B8%83%E7%AB%A0%EF%BC%9A%E5%8F%AF%E8%A7%86%E5%8C%96/7.1%20%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    07 第七章：可视化
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../08-%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9A%E7%94%9F%E6%80%81%E7%AE%80%E4%BB%8B/8.1%20%E6%9C%AC%E7%AB%A0%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    08 第八章：生态简介
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../09-%E7%AC%AC%E4%B9%9D%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/9.1%20%E4%BD%BF%E7%94%A8ONNX%E8%BF%9B%E8%A1%8C%E9%83%A8%E7%BD%B2%E5%B9%B6%E6%8E%A8%E7%90%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    09 第九章：模型部署
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    10 第十章：常见代码解读
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            10 第十章：常见代码解读
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 图像分类简介（补充中）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.2%20%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    目标检测简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.3%20%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.3 图像分割简介（补充中）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LSTM%E8%A7%A3%E8%AF%BB%E5%8F%8A%E5%AE%9E%E6%88%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文章结构
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../RNN%E8%AF%A6%E8%A7%A3%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文章结构
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ResNet%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ResNet源码解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Swin-Transformer%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Swin Transformer解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Transformer%20%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformer 解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    ViT解读
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    ViT解读
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      前言
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vit_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ViT 的整体流程
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patch-embedding-linear-projection" class="md-nav__link">
+    <span class="md-ellipsis">
+      切分和映射 Patch Embedding + Linear Projection
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-token-postional-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      分类表征和位置信息 Class Token + Postional Embedding
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transformer-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformer Encoder
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformer Encoder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-head-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-head Attention
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      MLP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-norm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer Norm
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformer-encoder_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformer Encoder 完整代码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vit_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      ViT 完整代码
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    
+  
+  
+    <a href="../YOLO%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB/MMYOLO%E5%AE%9E%E7%8E%B0/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    YOLO系列解读
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../notebook/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Notebook
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      前言
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vit_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      ViT 的整体流程
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#patch-embedding-linear-projection" class="md-nav__link">
+    <span class="md-ellipsis">
+      切分和映射 Patch Embedding + Linear Projection
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#class-token-postional-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      分类表征和位置信息 Class Token + Postional Embedding
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#transformer-encoder" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformer Encoder
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Transformer Encoder">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#multi-head-attention" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-head Attention
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mlp" class="md-nav__link">
+    <span class="md-ellipsis">
+      MLP
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#layer-norm" class="md-nav__link">
+    <span class="md-ellipsis">
+      Layer Norm
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transformer-encoder_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transformer Encoder 完整代码
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#vit_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      ViT 完整代码
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/10-第十章：常见代码解读/ViT解读.md" title="编辑此页" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/10-第十章：常见代码解读/ViT解读.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5Z"/></svg>
+    </a>
+  
+
+
+<h1 id="vit">ViT解读<a class="headerlink" href="#vit" title="Permanent link">⚓︎</a></h1>
+<p>
+<font size=3><b>[ViT] An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale.</b></font>
+<br>
+<font size=2>Alexey Dosovitskiy, Lucas Beyer, Alexander Kolesnikov, Dirk Weissenborn, Xiaohua Zhai, Thomas Unterthiner, Mostafa Dehghani, Matthias Minderer, Georg Heigold, Sylvain Gelly, Jakob Uszkoreit, Neil Houlsby.</font>
+<br>
+<font size=2>ICLR 2021.</font>
+<a href='https://arxiv.org/pdf/2010.11929v2.pdf'>[paper]</a> <a href='https://github.com/lucidrains/vit-pytorch/blob/main/vit_pytorch/vit.py'>[code]</a> 
+<br>
+<font size=3>解读者：牛志康，西安电子科技大学本科生，Datawhale成员；小饭同学，香港城市大学研究生
+</font>
+<br>
+</p>
+
+<h2 id="_1">前言<a class="headerlink" href="#_1" title="Permanent link">⚓︎</a></h2>
+<p>Transformer 已经成为自然语言处理任务的一种基础网络，但它在计算机视觉中的应用仍然有限。因为 Transformer 对序列进行建模，如果我们将图像种的每一个像素都作为序列中的元素，因为序列的大小与图片的大小呈平方关系，将导致计算量大大增加。现有的工作要么是将注意力与卷积网络结合使用，要么用注意力机制替换 CNN 的某些组件或者降低图片的序列长度。这些改进都是基于 convolutional neural network (CNN) 卷积神经网络构建的，于是人们就在希望有一种完全基于 Transformer 的骨干网络，可以拥有 Transformer 全局建模的特性也可以不过多修改原始 Transformer 的结构。基于这种 motivation，才出现了 Vision Transformer (ViT) 这篇优秀的工作。</p>
+<p>本文将从原理和代码实现上进行讲解，结合本课程需求，我们将着重讲解代码的实现，论文中更多的细节还请各位同学详细阅读原论文或关注 Whalepaper 后续的论文精读。</p>
+<h2 id="vit_1">ViT 的整体流程<a class="headerlink" href="#vit_1" title="Permanent link">⚓︎</a></h2>
+<p>如下图所示，ViT 的主要思想是将图片分成一个一个的小 <code>patch</code>，将每一个 <code>patch</code> 作为序列的元素输入 Transformer 中进行计算。
+<img src="figures/vit_framework.png" align="center" style="zoom:80%;" /></p>
+<p>其具体流程如下：
+1. <strong>切分和映射</strong>：对一张标准图像，我们首先将图片切分成一个一个小的 <code>patch</code>，然后将它们的维度拉平 <code>Flatten</code> 为一维的向量，最后我们将这些向量通过线性映射 <code>Linear Project</code> <span class="arithmatex">\(\mathbf{E}\)</span> 到维度为 <span class="arithmatex">\(D\)</span> 的空间。
+2. <strong>分类表征和位置信息</strong>：<strong>分类表征</strong>：为了实现图像分类，我们在得到的向量中需要加入一个 <code>classs token</code>  <span class="arithmatex">\(\mathbf{x}_\text{class}\)</span> 作为分类表征（如上图中标注 <span class="arithmatex">\(*\)</span>的粉色向量所示）。<strong>位置信息</strong>：图像和文本一样也需要注意顺序问题，因此作者通过 <code>Position Embedding</code> <span class="arithmatex">\(\mathbf{E}_{pos}\)</span> 加入位置编码信息（如上图中标注 <span class="arithmatex">\(0-9\)</span> 的紫色向量所示）。
+3. <strong>Transformer Encoder</strong>：然后我们将经过上面操作的 <code>token</code> 送入 <code>Transformer Encoder</code>。这里的 <code>Transformer Encoder</code> 和 <code>Transformer (Attention is All You Need)</code> 文章中实现基本一致，主要是通过多头注意力机制，对 <code>patch</code> 之间进行全局的信息提取。
+4. <strong>输出与分类</strong>：对于分类任务，我们只需要获得 <code>class token</code> 经过 <code>Transformer Encoder</code> 得到的输出，加一个 <code>MLP Head</code> 进行分类学习。</p>
+<p>我们论文代码的讲解也将按照上面的流程，对重要模块进行讲解，我们所展示的ViT代码示例来源于<a href="https://github.com/rwightman/pytorch-image-models/blob/master/timm/models/vision_transformer.py">rwightman/timm</a>并进行了部分简化，在此感谢每一位开源贡献者所作出的贡献。</p>
+<h2 id="patch-embedding-linear-projection">切分和映射 Patch Embedding + Linear Projection<a class="headerlink" href="#patch-embedding-linear-projection" title="Permanent link">⚓︎</a></h2>
+<p>对一张标准图像 <span class="arithmatex">\(\mathbf{x}\)</span>，其分辨率为 <span class="arithmatex">\(H \times W \times C\)</span>。为了方便讨论，我们取 ViT 的标准输入 <span class="arithmatex">\(H \times W \times C = 224 \times 224 \times 3\)</span> 进行一些具体维度的讲解。通过切分操作，我们将整个图片分成多个 <code>patch</code> <span class="arithmatex">\(\mathbf{x}_p\)</span>，其大小为 <span class="arithmatex">\(<span class="arithmatex">\(P \times P \times C = 16 \times 16 \times 3 = 768。\)</span>\)</span> 这样，一共可以得到 <code>Patch</code> 的数量为 <span class="arithmatex">\(<span class="arithmatex">\(N={(H \times W)}/{(P \times P)} = {(224 \times 224)}/{(16 \times 16)} = {(224 / 16)}\times {(224 / 16)} = 14 \times 14 = 196。\)</span>\)</span> 所以，我们将一张 <span class="arithmatex">\(224 \times 224 \times 3\)</span> 的标准图片， 通过转换得到了 <span class="arithmatex">\(196\)</span> 个 <code>patch</code>，每个 <code>patch</code> 的维度是 <span class="arithmatex">\(768\)</span>。</p>
+<p>对得到的 <code>patch</code> 通过 <span class="arithmatex">\(\mathbf{E} \in {\mathbb{R}^{768 \times D}}\)</span> 进行线性映射到维度 <span class="arithmatex">\(D\)</span>，我们将映射后的 <code>patch</code> 叫做 <code>token</code>，以便于和原本 Transformer 的术语进行统一（代码中默认的 <span class="arithmatex">\(D\)</span> 仍然为 <span class="arithmatex">\(768\)</span>。我们认为，为了不损失信息，这里 <span class="arithmatex">\(D\)</span> 满足大于等于 <span class="arithmatex">\(768\)</span> 即可）。对应文中公式，上述操作可以表示为：
+$$
+\begin{align}
+[\mathbf{x}_p^1\mathbf{E}; \mathbf{x}_p^2\mathbf{E}; \cdots; \mathbf{x}_p^N\mathbf{E}], \quad \mathbf{E}\in\mathbb{R}^{(P^2\cdot C)\times D}。
+\end{align}
+$$</p>
+<p>以上是按照原论文对<strong>切分和映射</strong>的讲解，在实际的代码实现过程中，切分和映射实际上是通过一个二维卷积 <code>nn.Conv2d()</code> 一步完成的。为了实现一步操作，作者将卷积核的大小 <code>kernal_size</code> 直接设置为了 <code>patch_size</code>，即 <span class="arithmatex">\(P=16\)</span>。然后，将卷积核的步长 <code>stride</code> 也设置为了同样的 <code>patch_size</code>，这样就实现了不重复的切割图片。而卷积的特征输入和输出维度，分别设为了 <span class="arithmatex">\(C=3\)</span> 和 <span class="arithmatex">\(D=768\)</span>，对应下方代码的 <code>in_c</code> 和 <code>embed_dim</code>。
+<div class="highlight"><pre><span></span><code><span class="bp">self</span><span class="o">.</span><span class="n">proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_c</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">patch_size</span><span class="p">)</span>
+</code></pre></div>
+一张 <span class="arithmatex">\(1 \times 3 \times 224 \times 224\)</span> 的图像（其中 <span class="arithmatex">\(1\)</span> 是 <code>batch_size</code> 的维度），经过上述卷积操作得到 <span class="arithmatex">\(1 \times 768 \times 14 \times 14\)</span> 的张量。（代码中将 <span class="arithmatex">\(14 \times 14 = 196\)</span> 当作 <code>grid</code> 的个数，即 <code>grid_size=(14, 14)</code>）然后，对其进行拉平 <code>flatten(2)</code> 得到 <span class="arithmatex">\(1 \times 768 \times 196\)</span> 的张量。因为 Transformer 需要将序列维度调整到前面，我们再通过 <code>transpose(1, 2)</code> 调整特征和序列维度，最终得到的张量大小为 <span class="arithmatex">\(1 \times 196 \times 768\)</span>。切分、映射、拉平和维度调整统统经过下面一步操作得到：
+<div class="highlight"><pre><span></span><code><span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+</code></pre></div></p>
+<p>在代码中，这些操作全部被写在名为 <code>PatchEmbed</code> 的模块中，其具体的实现如下所示：</p>
+<p><div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">PatchEmbed</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Image --&gt; Patch Embedding --&gt; Linear Proj --&gt; Pos Embedding</span>
+<span class="sd">    Image size -&gt; [224,224,3]</span>
+<span class="sd">    Patch size -&gt; 16*16</span>
+<span class="sd">    Patch num -&gt; (224^2)/(16^2)=196</span>
+<span class="sd">    Patch dim -&gt; 16*16*3 =768</span>
+<span class="sd">    Patch Embedding: [224,224,3] -&gt; [196,768]</span>
+<span class="sd">    Linear Proj: [196,768] -&gt; [196,768]</span>
+<span class="sd">    Positional Embedding: [197,768] -&gt; [196,768]</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">img_size</span><span class="o">=</span><span class="mi">224</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">in_c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">embed_dim</span><span class="o">=</span><span class="mi">768</span><span class="p">,</span> <span class="n">norm_layer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            img_size: 默认参数224</span>
+<span class="sd">            patch_size: 默认参数是16</span>
+<span class="sd">            in_c: 输入的通道数</span>
+<span class="sd">            embed_dim: 16*16*3 = 768</span>
+<span class="sd">            norm_layer: 是否使用norm层，默认为否</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">img_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">img_size</span><span class="p">,</span> <span class="n">img_size</span><span class="p">)</span> <span class="c1"># -&gt; img_size = (224,224)</span>
+        <span class="n">patch_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">patch_size</span><span class="p">)</span> <span class="c1"># -&gt; patch_size = (16,16)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">img_size</span> <span class="o">=</span> <span class="n">img_size</span> <span class="c1"># -&gt; (224,224)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch_size</span> <span class="o">=</span> <span class="n">patch_size</span> <span class="c1"># -&gt; (16,16)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grid_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">img_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">//</span> <span class="n">patch_size</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">img_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">//</span> <span class="n">patch_size</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="c1"># -&gt; grid_size = (14,14)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_patches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="c1"># -&gt; num_patches = 196</span>
+        <span class="c1"># Patch+linear proj的这个操作 [224,224,3] --&gt; [14,14,768]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_c</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">stride</span><span class="o">=</span><span class="n">patch_size</span><span class="p">)</span>
+        <span class="c1"># 判断是否有norm_layer层，要是没有不改变输入</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">)</span> <span class="k">if</span> <span class="n">norm_layer</span> <span class="k">else</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># 计算各个维度的大小</span>
+        <span class="n">B</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">W</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">assert</span> <span class="n">H</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">and</span> <span class="n">W</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> \
+            <span class="sa">f</span><span class="s2">&quot;Input image size (</span><span class="si">{</span><span class="n">H</span><span class="si">}</span><span class="s2">*</span><span class="si">{</span><span class="n">W</span><span class="si">}</span><span class="s2">) doesn&#39;t match model (</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">*</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">img_size</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">).&quot;</span>
+
+        <span class="c1"># flatten: [B, C, H, W] -&gt; [B, C, HW], flatten(2)代表的是从2位置开始展开</span>
+        <span class="c1"># eg: [1,3,224,224] --&gt; [1,768,14,14] -flatten-&gt;[1,768,196]</span>
+        <span class="c1"># transpose: [B, C, HW] -&gt; [B, HW, C]</span>
+        <span class="c1"># eg: [1,768,196] -transpose-&gt; [1,196,768]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</code></pre></div>
+**在默认情况下，这一步是不进行 <code>layer_norm</code> 操作的，即它被设置为 <code>nn.Identity()</code>。对于 <code>layer_norm</code>，我们会在下面进行详细的讲解。</p>
+<h2 id="class-token-postional-embedding">分类表征和位置信息 Class Token + Postional Embedding<a class="headerlink" href="#class-token-postional-embedding" title="Permanent link">⚓︎</a></h2>
+<p>如下图所示，左侧灰色部分为加入分类表征，中间紫色部分为加入位置信息。
+<img alt="图源amaarora" src="../figures/vit_cls_pos.png" /></p>
+<p><strong>分类表征：Class Token</strong>
+为了实现图像分类，我们在切分和映射后的向量 <span class="arithmatex">\([\mathbf{x}_p^1\mathbf{E}; \mathbf{x}_p^2\mathbf{E}; \cdots; \mathbf{x}_p^N\mathbf{E}]\)</span> 中加入一个 <code>class token</code>  <span class="arithmatex">\(\mathbf{x}_\text{class} \in \mathbb{R}^{D}\)</span> 作为分类表征（如上图中最左侧深灰色框所示）。将这个表征放置在序列的第一个位置上，我们就得到一个维度为 <span class="arithmatex">\((196+1) \times 768\)</span> 的新张量：
+$$
+\begin{align}
+[\mathbf{x}_{\text{class}}; \mathbf{x}_p^1\mathbf{E}; \mathbf{x}_p^2\mathbf{E}; \cdots; \mathbf{x}_p^N\mathbf{E}] 
+\end{align}
+$$
+对于具体的代码实现，我们通过 <code>nn.Parameter(torch.zeros(1, 1, 768))</code> 实例化一个可学习的 <code>cls_token</code>，然后将这个 <code>cls_token</code> 按照 <code>batch_size = x.shape[0]</code> 进行复制，最后将其和之前经过切分和映射的 <code>x</code> 并在一起 <code>torch.cat((cls_token, x), dim=1)</code>。其完整代码，如下所示：
+<div class="highlight"><pre><span></span><code><span class="n">cls_token</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">768</span><span class="p">))</span> <span class="c1"># -&gt; cls token</span>
+<span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">trunc_normal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cls_token</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span> <span class="c1"># 初始化</span>
+<span class="n">cls_token</span> <span class="o">=</span> <span class="n">cls_token</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># (1,1,768) -&gt; (128,1,768)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">cls_token</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># [128, 197, 768]</span>
+</code></pre></div></p>
+<p>**其实也可以不加入这个 <code>cls token</code>，我们可以对输出 <code>token</code> 做 <code>GAP(Global Average Pooling)</code>，然后对 <code>GAP</code> 的结果进行分类。</p>
+<p><strong>位置信息：Postional Embedding</strong>
+图像和文本一样也需要注意顺序问题，因此作者通过 <code>Position Embedding</code> <span class="arithmatex">\(\mathbf{E}_{\text{pos}}\in\mathbb{R}^{(N + 1)\times D}\)</span> 加入位置编码信息。这个 <code>Position Embedding</code> 和上面得到的分类表征张量，直接相加：
+$$
+\begin{align}
+\mathbf{z}<em>0 &amp;= [\mathbf{x}</em>{\text{class}}; \mathbf{x}<em>p^1\mathbf{E}; \mathbf{x}_p^2\mathbf{E}; \cdots; \mathbf{x}_p^N\mathbf{E};] + \mathbf{E}</em>{\text{pos}}, &amp; \mathbf{E}&amp;\in\mathbb{R}^{(P^2\cdot C)\times D}, \mathbf{E}_{\text{pos}}\in\mathbb{R}^{(N + 1)\times D}
+\end{align}
+$$</p>
+<p>与 Transformer 使用余弦位置编码不同的是，ViT 通过<code>nn.Parameter()</code>实现了一个可以学习的位置编码。
+<div class="highlight"><pre><span></span><code><span class="n">num_patches</span> <span class="o">=</span> <span class="mi">196</span>
+<span class="n">pos_embed</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_patches</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">768</span><span class="p">))</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="n">pos_embed</span>
+</code></pre></div>
+**这里 <code>pos_embed</code> 在 <code>batch_size</code> 的维度进行了 boardcast，所以所有的样本都是同样的 <code>pos_embed</code>。</p>
+<h2 id="transformer-encoder">Transformer Encoder<a class="headerlink" href="#transformer-encoder" title="Permanent link">⚓︎</a></h2>
+<p>下一步，我们只需要将序列 <span class="arithmatex">\(\mathbf{z}_0\)</span> 输入 Transformer Encoder 即可。如下图所示，每个 Transformer Encoder 由 Multi-head Attention、MLP、Norm (Layer Norm,LN) 并外加 shortcut 连接实现。
+$$
+\begin{align}
+\mathbf{z}'<em>l &amp;= \text{MSA}(\text{LN}(\mathbf{z}</em>{l-1})) + \mathbf{z}_{l-1}, &amp; l &amp;=1\dots L, \
+\mathbf{z}_l &amp;= \text{MLP}(\text{LN}(\mathbf{z}'_l)) + \mathbf{z}'_l,  &amp; l &amp;=1\dots L, \
+\mathbf{y} &amp;= \text{LN}(\mathbf{z}_L^0)
+\end{align}
+$$
+<center></p>
+<figure>
+<img src="figures/vit_transformer.png", style="zoom:37%;" />
+</figure>
+<p></center>
+下面我们将对这些模块逐一进行讲解。</p>
+<h3 id="multi-head-attention">Multi-head Attention<a class="headerlink" href="#multi-head-attention" title="Permanent link">⚓︎</a></h3>
+<p>Multi-head Attention 或者叫做 Multi-head Self-Attention (MSA) 是由多个 Self-attention (SA) 模块组成，它们的框图可由下面所示，其中左侧为 SA，右侧为 MSA。
+<center></p>
+<figure>
+<img src="figures/vit_sa.png", style="zoom:37%;" />
+·
+·
+·
+·
+·
+·
+<img src="figures/vit_msa.png", style="zoom:30%;" />
+</figure>
+<p></center></p>
+<p>对于一个标准的 SA 模块，我们通过对输入张量 <span class="arithmatex">\(\mathbf{z}\)</span> 进行一个映射 <span class="arithmatex">\(\mathbf{W_{SA}}\)</span> 得到 <span class="arithmatex">\(Q, K, V\)</span>
+$$
+[Q, K, V] = \mathbf{z} \mathbf{W}_{\text{SA}}.
+$$
+对于 MSA，我们需要对其输入再次进行切分为 <span class="arithmatex">\(k\)</span> 个部分 （<span class="arithmatex">\(k=\)</span><code>self.num_heads</code>），而每个部分的维度为原本维度的 <span class="arithmatex">\(k\)</span> 分之一，即 <code>C // self.num_heads</code>。然后，将维度进行调整，即 <code>q, k, v</code> 到第 1 个维度， 批大小 <code>batch_size</code> 为第 2 个维度，头的数量数量 <code>num_heads</code> 为第 3 个维度，切分块的数量 <code>num_patches</code> 和每个头的特征维度 <code>embed_dim_per_head</code> 为最后两个维度。这种维度调整，将方便提取 <code>q, k, v</code>，以及后面的注意力计算。上述步骤在代码中对应：
+<div class="highlight"><pre><span></span><code><span class="bp">self</span><span class="o">.</span><span class="n">qkv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">qkv_bias</span><span class="p">)</span>
+<span class="n">qkv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qkv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">C</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">qkv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qkv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qkv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># seperate q, k, v</span>
+</code></pre></div></p>
+<p>现在，如果我们将每一个 <code>head</code>，看作一个独立的计算单元。我们可以对每一个<code>head</code> 进行标准的 SA 计算
+$$
+Attention(Q, K, V) = softmax(\frac{Q K^T}{\sqrt {D_k}}) \cdot V
+$$
+然后，这些 <code>head</code> 会被拼接在一起，计算最终的输出：
+$$
+\mathrm{MultiHead}(Q, K, V) = \mathrm{Concat}(\mathrm{head_1}, ...,
+\mathrm{head_h})W^O    \
+    \text{where}~\mathrm{head_i} = \mathrm{Attention}(QW^Q_i, KW^K_i, VW^V_i)
+$$</p>
+<p>其中 <span class="arithmatex">\(W^O\)</span> 代表的是线性变换层，<span class="arithmatex">\(head_i\)</span> 代表的是每个 <code>head</code> 的输出，其中 <span class="arithmatex">\(W^Q_i\)</span>，<span class="arithmatex">\(W^K_i\)</span>, <span class="arithmatex">\(W^V_i\)</span>，等价于每个 <code>head</code> 的线性映射权重（如上面计算 <code>qkv</code>所讲，实际代码实现中，我们会先一起计算 <code>qkv</code>，再进行 <code>head</code> 的切分）。如果按照默认实现，一般切分为 <span class="arithmatex">\(k=8\)</span> 个头，其中 <span class="arithmatex">\(D_k=D/k = 768/8=96\)</span>，是为了归一化点乘的结果。</p>
+<p>在代码实现的时候，作者充分考虑了多头的并行计算。通过点乘的形式对所有的 <code>head</code> 一起计算相关性 <code>(q @ k.transpose(-2, -1))</code>，然后经过 <code>softmax</code> 得到权重 <code>attn</code> （这些权重的维度为 <code>[batch_size, num_heads, num_patches + 1, num_patches + 1]</code>）。
+之后将这些权重 <code>attn</code> 和 <code>v</code> （其维度为 <code>[batch_size, num_heads, num_patches+1, embed_dim_per_head]</code>） 进行点乘，得到注意力的输出结果。这里在点乘的时候，我们只需要看 <code>attn</code> 和 <code>v</code>的最后两个维度，分别为<code>[num_patches + 1, num_patches + 1]</code> 和 <code>[num_patches+1, embed_dim_per_head]</code>，维持其他维度不变，我们可以得到输出的结果维度为 <code>[batch_size, num_heads, num_patches + 1, embed_dim_per_head]</code>。
+最后，我们通过将特征维度和多头维度交换 <code>transpose(1, 2)</code> 和 重组第2个及后面所有的维度 <code>reshape(B, N, C)</code>，就可以得到维度为 <code>[batch_size, num_patches + 1, total_embed_dim]</code> 和上面公式相同的并行多头计算结果。其完整实现如下所示
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Attention</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">dim</span><span class="p">,</span>   <span class="c1"># 输入token的dim</span>
+                 <span class="n">num_heads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="c1"># attention head的个数</span>
+                 <span class="n">qkv_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># 是否使用qkv bias</span>
+                 <span class="n">qk_scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">attn_drop_ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">proj_drop_ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Attention</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span> <span class="o">=</span> <span class="n">num_heads</span>
+        <span class="c1"># 计算每一个head处理的维度head_dim = dim // num_heads --&gt; 768/8 = 96</span>
+        <span class="n">head_dim</span> <span class="o">=</span> <span class="n">dim</span> <span class="o">//</span> <span class="n">num_heads</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scale</span> <span class="o">=</span> <span class="n">qk_scale</span> <span class="ow">or</span> <span class="n">head_dim</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span> <span class="c1"># 根下dk操作</span>
+        <span class="c1"># 使用nn.Linear生成w_q,w_k,w_v，因为本质上每一个变换矩阵都是线性变换，</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">qkv</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span> <span class="o">*</span> <span class="mi">3</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="n">qkv_bias</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attn_drop</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">attn_drop_ratio</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proj</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proj_drop</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">proj_drop_ratio</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># [batch_size, num_patches + 1, total_embed_dim]</span>
+        <span class="c1"># total_embed_dim不是一开始展开的那个维度，是经过了一个线性变换层得到的</span>
+        <span class="n">B</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">C</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+
+        <span class="c1"># [batch_size, num_patches+1, total_embed_dim] -qkv()-&gt; [batch_size, num_patches + 1, 3 * total_embed_dim]</span>
+        <span class="c1"># reshape: -&gt; [batch_size, num_patches + 1, 3, num_heads, embed_dim_per_head]</span>
+        <span class="c1"># permute: -&gt; [3, batch_size, num_heads, num_patches + 1, embed_dim_per_head]</span>
+        <span class="n">qkv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">qkv</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">C</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_heads</span><span class="p">)</span><span class="o">.</span><span class="n">permute</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="c1"># q,k,v = [batch_size, num_heads, num_patches + 1, embed_dim_per_head]</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">qkv</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">qkv</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">qkv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="c1"># make torchscript happy (cannot use tensor as tuple)</span>
+
+        <span class="c1"># transpose(-2,-1)在最后两个维度进行操作，输入的形状[batch_size,num_heads,num_patches+1,embed_dim_per_head]</span>
+        <span class="c1"># transpose: -&gt; [batch_size, num_heads, embed_dim_per_head, num_patches + 1]</span>
+        <span class="c1"># @: multiply -&gt; [batch_size, num_heads, num_patches + 1, num_patches + 1]</span>
+        <span class="n">attn</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span> <span class="o">@</span> <span class="n">k</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">scale</span>
+        <span class="n">attn</span> <span class="o">=</span> <span class="n">attn</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">attn</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">attn_drop</span><span class="p">(</span><span class="n">attn</span><span class="p">)</span>
+
+        <span class="c1"># @: multiply -&gt; [batch_size, num_heads, num_patches + 1, embed_dim_per_head]</span>
+        <span class="c1"># transpose: -&gt; [batch_size, num_patches + 1, num_heads, embed_dim_per_head]</span>
+        <span class="c1"># reshape: -&gt; [batch_size, num_patches + 1, total_embed_dim]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">attn</span> <span class="o">@</span> <span class="n">v</span><span class="p">)</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">B</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proj</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proj_drop</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</code></pre></div></p>
+<h3 id="mlp">MLP<a class="headerlink" href="#mlp" title="Permanent link">⚓︎</a></h3>
+<p>MLP层类似于原始Transformer中的Feed Forward Network。</p>
+<blockquote>
+<p>In ViT, only MLP layers are local and translationally equivariant, while the self-attention layers are global.</p>
+</blockquote>
+<p>为了理解这句话，即 MLP 只对局部信息进行操作，我们需要强调 <code>nn.Linear()</code> 操作只对输入张量的最后一个维度进行操作。那么，对于输入维度为 <code>[batch_size, num_patches + 1, total_embed_dim]</code>，学习到的线性层对于所有 <code>patch</code> 都是一样的。所以，它是一个局部信息的建模。对于 Attention，因为它是在不同的 <code>patch</code> 层面或者不同的序列层面进行建模，所以是全局信息建模。因此，作者使用了 MLP 和 Attention 一起进行局部和全局信息的提取。</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Mlp</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    in_features --&gt; hidden_features --&gt; out_features</span>
+<span class="sd">    论文实现时：in_features.shape = out_features.shape</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_features</span><span class="p">,</span> <span class="n">hidden_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">out_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">act_layer</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="mf">0.</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># 用or实现了或操作，当hidden_features/out_features为默认值None时</span>
+        <span class="c1"># 此时out_features/hidden_features=None or in_features = in_features</span>
+        <span class="c1"># 当对out_features或hidden_features进行输入时，or操作将会默认选择or前面的</span>
+        <span class="c1"># 此时out_features/hidden_features = out_features/hidden_features</span>
+        <span class="n">out_features</span> <span class="o">=</span> <span class="n">out_features</span> <span class="ow">or</span> <span class="n">in_features</span>
+        <span class="n">hidden_features</span> <span class="o">=</span> <span class="n">hidden_features</span> <span class="ow">or</span> <span class="n">in_features</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="n">hidden_features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">act</span> <span class="o">=</span> <span class="n">act_layer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_features</span><span class="p">,</span> <span class="n">out_features</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drop</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">drop</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># in_features --&gt; hidden_features --&gt; out_features</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc1</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">act</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fc2</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+</code></pre></div>
+<h3 id="layer-norm">Layer Norm<a class="headerlink" href="#layer-norm" title="Permanent link">⚓︎</a></h3>
+<p>Normalization 有很多种，但是它们都有一个共同的目的，那就是把输入转化成均值为 0 方差为 1 的数据（或者某个学习到的均值和方差）。我们在把数据送入激活函数之前进行 Normalization（归一化），因为我们不希望输入数据落在激活函数的饱和区。</p>
+<p>Batch Norm 的作用是在对这批样本的同一维度特征做归一化，而 Layer Norm 的作用是对<strong>单个样本的所有维度特征做归一化</strong>。举一个简单的例子，对于通过编码的句子“我爱学习”，Batch Norm 是对这四个字进行归一化，而 Layer Norm 是对每个字本身的特征进行归一化。</p>
+<p>对于 Layer Norm，其公式如下所示
+<span class="arithmatex">\(<span class="arithmatex">\(L N\left(x_i\right)=\alpha \times \frac{x_i-u_L}{\sqrt{\sigma_L^2+\epsilon}}+\beta\)</span>\)</span>
+可以通过 <code>nn.LayerNorm</code> 进行实现。</p>
+<h3 id="transformer-encoder_1">Transformer Encoder 完整代码<a class="headerlink" href="#transformer-encoder_1" title="Permanent link">⚓︎</a></h3>
+<p>整合上面 Multi-head Attention、MLP、Norm (Layer Norm,LN) 并外加 shortcut 连接代码，我们可以得到 Transformer Encoder 的完整代码。
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">Block</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    每一个Encoder Block的构成</span>
+<span class="sd">    每个Encode Block的流程：norm1 --&gt; Multi-Head Attention --&gt; norm2 --&gt; MLP</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">dim</span><span class="p">,</span> <span class="c1"># 输入mlp的维度</span>
+                 <span class="n">num_heads</span><span class="p">,</span> <span class="c1"># Multi-Head-Attention的头个数</span>
+                 <span class="n">mlp_ratio</span><span class="o">=</span><span class="mf">4.</span><span class="p">,</span> <span class="c1"># hidden_features / in_features = mlp_ratio</span>
+                 <span class="n">qkv_bias</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="c1"># q,k,v的生成是否使用bias</span>
+                 <span class="n">qk_scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">drop_ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="c1"># dropout的比例</span>
+                 <span class="n">attn_drop_ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="c1"># 注意力dropout的比例</span>
+                 <span class="n">drop_path_ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">act_layer</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">,</span> <span class="c1"># 激活函数默认使用GELU</span>
+                 <span class="n">norm_layer</span><span class="o">=</span><span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">):</span> <span class="c1"># Norm默认使用LayerNorm</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Block</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1"># 第一层normalization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm1</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+        <span class="c1"># self.attention层的实现</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attn</span> <span class="o">=</span> <span class="n">Attention</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">qkv_bias</span><span class="o">=</span><span class="n">qkv_bias</span><span class="p">,</span> <span class="n">qk_scale</span><span class="o">=</span><span class="n">qk_scale</span><span class="p">,</span><span class="n">attn_drop_ratio</span><span class="o">=</span><span class="n">attn_drop_ratio</span><span class="p">,</span> <span class="n">proj_drop_ratio</span><span class="o">=</span><span class="n">drop_ratio</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drop_path</span> <span class="o">=</span> <span class="n">DropPath</span><span class="p">(</span><span class="n">drop_path_ratio</span><span class="p">)</span> <span class="k">if</span> <span class="n">drop_path_ratio</span> <span class="o">&gt;</span> <span class="mf">0.</span> <span class="k">else</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
+        <span class="c1"># 第二层normalization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm2</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">dim</span><span class="p">)</span>
+        <span class="n">mlp_hidden_dim</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">dim</span> <span class="o">*</span> <span class="n">mlp_ratio</span><span class="p">)</span> <span class="c1"># hidden_dim = dim * mlp_ratio</span>
+        <span class="c1"># mlp实现</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mlp</span> <span class="o">=</span> <span class="n">Mlp</span><span class="p">(</span><span class="n">in_features</span><span class="o">=</span><span class="n">dim</span><span class="p">,</span> <span class="n">hidden_features</span><span class="o">=</span><span class="n">mlp_hidden_dim</span><span class="p">,</span> <span class="n">act_layer</span><span class="o">=</span><span class="n">act_layer</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="n">drop_ratio</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># 实现了两个残差连接</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm1</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_path</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mlp</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">norm2</span><span class="p">(</span><span class="n">x</span><span class="p">)))</span>
+        <span class="k">return</span> <span class="n">x</span>
+</code></pre></div></p>
+<h2 id="vit_2">ViT 完整代码<a class="headerlink" href="#vit_2" title="Permanent link">⚓︎</a></h2>
+<p>对输入图像，进行切分和影射、加入分类表征和位置信息、经过 Transformer Encoder、然后添加一个分类头进行输出，我们就完成了 ViT 所有的代码。</p>
+<p>完整的 ViT 主要模块流程，见下方 <code>VisionTransformer</code>。</p>
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">VisionTransformer</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">img_size</span><span class="o">=</span><span class="mi">224</span><span class="p">,</span>
+                 <span class="n">patch_size</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+                 <span class="n">in_c</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                 <span class="n">num_classes</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                 <span class="n">embed_dim</span><span class="o">=</span><span class="mi">768</span><span class="p">,</span>
+                 <span class="n">depth</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                 <span class="n">num_heads</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+                 <span class="n">mlp_ratio</span><span class="o">=</span><span class="mf">4.0</span><span class="p">,</span>
+                 <span class="n">qkv_bias</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">qk_scale</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">representation_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">distilled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">drop_ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">attn_drop_ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">drop_path_ratio</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
+                 <span class="n">embed_layer</span><span class="o">=</span><span class="n">PatchEmbed</span><span class="p">,</span>
+                 <span class="n">norm_layer</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">act_layer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Args:</span>
+<span class="sd">            img_size (int, tuple): input image size</span>
+<span class="sd">            patch_size (int, tuple): patch size</span>
+<span class="sd">            in_c (int): number of input channels</span>
+<span class="sd">            num_classes (int): number of classes for classification head</span>
+<span class="sd">            embed_dim (int): embedding dimension</span>
+<span class="sd">            depth (int): depth of transformer</span>
+<span class="sd">            num_heads (int): number of attention heads</span>
+<span class="sd">            mlp_ratio (int): ratio of mlp hidden dim to embedding dim</span>
+<span class="sd">            qkv_bias (bool): enable bias for qkv if True</span>
+<span class="sd">            qk_scale (float): override default qk scale of head_dim ** -0.5 if set</span>
+<span class="sd">            representation_size (Optional[int]): enable and set representation layer (pre-logits) to this value if set</span>
+<span class="sd">            distilled (bool): model includes a distillation token and head as in DeiT models</span>
+<span class="sd">            drop_ratio (float): dropout rate</span>
+<span class="sd">            attn_drop_ratio (float): attention dropout rate</span>
+<span class="sd">            drop_path_ratio (float): stochastic depth rate</span>
+<span class="sd">            embed_layer (nn.Module): patch embedding layer</span>
+<span class="sd">            norm_layer: (nn.Module): normalization layer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">VisionTransformer</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span> <span class="o">=</span> <span class="n">num_classes</span>
+        <span class="c1"># 每个patch的图像维度 = embed_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span> <span class="o">=</span> <span class="n">embed_dim</span>  <span class="c1"># num_features for consistency with other models</span>
+        <span class="c1"># token的个数为1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_tokens</span> <span class="o">=</span> <span class="mi">2</span> <span class="k">if</span> <span class="n">distilled</span> <span class="k">else</span> <span class="mi">1</span>
+        <span class="c1"># 设置激活函数和norm函数</span>
+        <span class="n">norm_layer</span> <span class="o">=</span> <span class="n">norm_layer</span> <span class="ow">or</span> <span class="n">partial</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">)</span>
+        <span class="n">act_layer</span> <span class="o">=</span> <span class="n">act_layer</span> <span class="ow">or</span> <span class="n">nn</span><span class="o">.</span><span class="n">GELU</span>
+        <span class="c1"># 对应的将图片打成patch的操作</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">patch_embed</span> <span class="o">=</span> <span class="n">embed_layer</span><span class="p">(</span><span class="n">img_size</span><span class="o">=</span><span class="n">img_size</span><span class="p">,</span> <span class="n">patch_size</span><span class="o">=</span><span class="n">patch_size</span><span class="p">,</span> <span class="n">in_c</span><span class="o">=</span><span class="n">in_c</span><span class="p">,</span> <span class="n">embed_dim</span><span class="o">=</span><span class="n">embed_dim</span><span class="p">)</span>
+        <span class="n">num_patches</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_embed</span><span class="o">.</span><span class="n">num_patches</span>
+        <span class="c1"># 设置分类的cls_token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cls_token</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">))</span>
+        <span class="c1"># distilled 是Deit中的 这里为None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dist_token</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">))</span> <span class="k">if</span> <span class="n">distilled</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="c1"># pos_embedding 为一个可以学习的参数</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos_embed</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Parameter</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_patches</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_tokens</span><span class="p">,</span> <span class="n">embed_dim</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos_drop</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="n">drop_ratio</span><span class="p">)</span>
+
+        <span class="n">dpr</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">torch</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">drop_path_ratio</span><span class="p">,</span> <span class="n">depth</span><span class="p">)]</span>  <span class="c1"># stochastic depth decay rule</span>
+        <span class="c1"># 使用nn.Sequential进行构建，ViT中深度为12</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="p">[</span>
+            <span class="n">Block</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">num_heads</span><span class="o">=</span><span class="n">num_heads</span><span class="p">,</span> <span class="n">mlp_ratio</span><span class="o">=</span><span class="n">mlp_ratio</span><span class="p">,</span> <span class="n">qkv_bias</span><span class="o">=</span><span class="n">qkv_bias</span><span class="p">,</span> <span class="n">qk_scale</span><span class="o">=</span><span class="n">qk_scale</span><span class="p">,</span>
+                  <span class="n">drop_ratio</span><span class="o">=</span><span class="n">drop_ratio</span><span class="p">,</span> <span class="n">attn_drop_ratio</span><span class="o">=</span><span class="n">attn_drop_ratio</span><span class="p">,</span> <span class="n">drop_path_ratio</span><span class="o">=</span><span class="n">dpr</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                  <span class="n">norm_layer</span><span class="o">=</span><span class="n">norm_layer</span><span class="p">,</span> <span class="n">act_layer</span><span class="o">=</span><span class="n">act_layer</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span>
+        <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">norm</span> <span class="o">=</span> <span class="n">norm_layer</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">)</span>
+
+        <span class="c1"># Representation layer</span>
+        <span class="k">if</span> <span class="n">representation_size</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">distilled</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_logits</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">num_features</span> <span class="o">=</span> <span class="n">representation_size</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pre_logits</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">OrderedDict</span><span class="p">([</span>
+                <span class="p">(</span><span class="s2">&quot;fc&quot;</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">embed_dim</span><span class="p">,</span> <span class="n">representation_size</span><span class="p">)),</span>
+                <span class="p">(</span><span class="s2">&quot;act&quot;</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">())</span>
+            <span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_logits</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pre_logits</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
+
+        <span class="c1"># Classifier head(s)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_features</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">)</span> <span class="k">if</span> <span class="n">num_classes</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head_dist</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">distilled</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">head_dist</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">embed_dim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_classes</span><span class="p">)</span> <span class="k">if</span> <span class="n">num_classes</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">nn</span><span class="o">.</span><span class="n">Identity</span><span class="p">()</span>
+
+        <span class="c1"># Weight init</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">trunc_normal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pos_embed</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">trunc_normal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dist_token</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">trunc_normal_</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cls_token</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">_init_vit_weights</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">forward_features</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="c1"># [B, C, H, W] -&gt; [B, num_patches, embed_dim]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">patch_embed</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>  <span class="c1"># [B, 196, 768]</span>
+        <span class="c1"># [1, 1, 768] -&gt; [B, 1, 768]</span>
+        <span class="n">cls_token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cls_token</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">cls_token</span><span class="p">,</span> <span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># [B, 197, 768]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">cls_token</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist_token</span><span class="o">.</span><span class="n">expand</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">),</span> <span class="n">x</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_drop</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">pos_embed</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">blocks</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dist_token</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">pre_logits</span><span class="p">(</span><span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">x</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">forward_features</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">x_dist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_dist</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">training</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">torch</span><span class="o">.</span><span class="n">jit</span><span class="o">.</span><span class="n">is_scripting</span><span class="p">():</span>
+                <span class="c1"># during inference, return the average of both classifier predictions</span>
+                <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">x_dist</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">x_dist</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">x</span>
+
+
+<span class="k">def</span> <span class="nf">_init_vit_weights</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    ViT weight initialization</span>
+<span class="sd">    :param m: module</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">):</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">trunc_normal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mf">.01</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">):</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">kaiming_normal_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;fan_out&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">bias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">nn</span><span class="o">.</span><span class="n">LayerNorm</span><span class="p">):</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">zeros_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">bias</span><span class="p">)</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">ones_</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>参考：</p>
+<p>An Image is Worth 16x16 Words: Transformers for Image Recognition at Scale https://arxiv.org/pdf/2010.11929.pdf
+Attention Is All You Need https://arxiv.org/abs/1706.03762</p>
+</blockquote>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      最后更新:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+        <br>
+        创建日期:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../Transformer%20%E8%A7%A3%E8%AF%BB/" class="md-footer__link md-footer__link--prev" aria-label="上一页: Transformer 解读">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                Transformer 解读
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../YOLO%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB/MMYOLO%E5%AE%9E%E7%8E%B0/" class="md-footer__link md-footer__link--next" aria-label="下一页: Index">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                Index
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Ean Yang
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/YQisme" target="_blank" rel="noopener" title="github主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/244185393?spm_id_from=333.788.0.0" target="_blank" rel="noopener" title="b站主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://eanyang7.com" target="_blank" rel="noopener" title="个人主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1-96 0zm40 304v128c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9l-28.6 47.6c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352h-16z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.prune", "navigation.top", "toc.follow", "header.autohide", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.action.edit", "content.action.view", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.cd18aaf1.min.js"></script>
+      
+    
+  </body>
+</html>

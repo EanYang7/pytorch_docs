@@ -1,0 +1,1338 @@
+
+<!doctype html>
+<html lang="zh" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="pytorch_docs">
+      
+      
+        <meta name="author" content="Ean Yang">
+      
+      
+        <link rel="canonical" href="https://eanyang7.github.io/pytorch_docs/10-%E7%AC%AC%E5%8D%81%E7%AB%A0%EF%BC%9A%E5%B8%B8%E8%A7%81%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/RNN%E8%AF%A6%E8%A7%A3%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0/">
+      
+      
+        <link rel="prev" href="../LSTM%E8%A7%A3%E8%AF%BB%E5%8F%8A%E5%AE%9E%E6%88%98/">
+      
+      
+        <link rel="next" href="../ResNet%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/">
+      
+      
+      <link rel="icon" href="../../assets/favicon.jpg">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.4.14">
+    
+    
+      
+        <title>文章结构 - pytorch 文档教程</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.fad675c6.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.356b1318.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#_1" class="md-skip">
+          跳转至
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="页眉">
+    <a href="../.." title="pytorch 文档教程" class="md-header__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pytorch 文档教程
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              文章结构
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="red" data-md-color-accent="deep-purple"  aria-label="切换为暗黑模式"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="切换为暗黑模式" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="red"  aria-label="切换为浅色模式"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="切换为浅色模式" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="搜索" placeholder="搜索" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="查找">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="分享" aria-label="分享" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="清空当前内容" aria-label="清空当前内容" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            正在初始化搜索引擎
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="导航栏" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="pytorch 文档教程" class="md-nav__button md-logo" aria-label="pytorch 文档教程" data-md-component="logo">
+      
+  <img src="../../assets/logo.jpg" alt="logo">
+
+    </a>
+    pytorch 文档教程
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/EanYang7/pytorch_docs" title="前往仓库" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M186.1 328.7c0 20.9-10.9 55.1-36.7 55.1s-36.7-34.2-36.7-55.1 10.9-55.1 36.7-55.1 36.7 34.2 36.7 55.1zM480 278.2c0 31.9-3.2 65.7-17.5 95-37.9 76.6-142.1 74.8-216.7 74.8-75.8 0-186.2 2.7-225.6-74.8-14.6-29-20.2-63.1-20.2-95 0-41.9 13.9-81.5 41.5-113.6-5.2-15.8-7.7-32.4-7.7-48.8 0-21.5 4.9-32.3 14.6-51.8 45.3 0 74.3 9 108.8 36 29-6.9 58.8-10 88.7-10 27 0 54.2 2.9 80.4 9.2 34-26.7 63-35.2 107.8-35.2 9.8 19.5 14.6 30.3 14.6 51.8 0 16.4-2.6 32.7-7.7 48.2 27.5 32.4 39 72.3 39 114.2zm-64.3 50.5c0-43.9-26.7-82.6-73.5-82.6-18.9 0-37 3.4-56 6-14.9 2.3-29.8 3.2-45.1 3.2-15.2 0-30.1-.9-45.1-3.2-18.7-2.6-37-6-56-6-46.8 0-73.5 38.7-73.5 82.6 0 87.8 80.4 101.3 150.4 101.3h48.2c70.3 0 150.6-13.4 150.6-101.3zm-82.6-55.1c-25.8 0-36.7 34.2-36.7 55.1s10.9 55.1 36.7 55.1 36.7-34.2 36.7-55.1-10.9-55.1-36.7-55.1z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    github仓库
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    深入浅出PyTorch
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../00-%E7%AC%AC%E9%9B%B6%E7%AB%A0%EF%BC%9A%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86/0.1%20%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E7%AE%80%E5%8F%B2/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    00 第零章：前置知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../01-%E7%AC%AC%E4%B8%80%E7%AB%A0%EF%BC%9A%E7%AE%80%E4%BB%8B%E5%92%8C%E5%AE%89%E8%A3%85/1.1%20PyTorch%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    01 第一章：简介和安装
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../02-%E7%AC%AC%E4%BA%8C%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/2.1%20%E5%BC%A0%E9%87%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    02 第二章：基础知识
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../03-%E7%AC%AC%E4%B8%89%E7%AB%A0%EF%BC%9A%E4%B8%BB%E8%A6%81%E7%BB%84%E6%88%90%E6%A8%A1%E5%9D%97/3.1%20%E6%80%9D%E8%80%83%EF%BC%9A%E5%AE%8C%E6%88%90%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%BF%85%E8%A6%81%E9%83%A8%E5%88%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    03 第三章：主要组成模块
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../04-%E7%AC%AC%E5%9B%9B%E7%AB%A0%EF%BC%9A%E5%9F%BA%E7%A1%80%E5%AE%9E%E6%88%98/4.1%20ResNet/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    04 第四章：基础实战
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../05-%E7%AC%AC%E4%BA%94%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89/5.1%20PyTorch%E6%A8%A1%E5%9E%8B%E5%AE%9A%E4%B9%89%E7%9A%84%E6%96%B9%E5%BC%8F/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    05 第五章：模型定义
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../06-%E7%AC%AC%E5%85%AD%E7%AB%A0%EF%BC%9A%E8%BF%9B%E9%98%B6%E8%AE%AD%E7%BB%83%E6%8A%80%E5%B7%A7/6.1%20%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    06 第六章：进阶训练技巧
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../07-%E7%AC%AC%E4%B8%83%E7%AB%A0%EF%BC%9A%E5%8F%AF%E8%A7%86%E5%8C%96/7.1%20%E5%8F%AF%E8%A7%86%E5%8C%96%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    07 第七章：可视化
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../08-%E7%AC%AC%E5%85%AB%E7%AB%A0%EF%BC%9A%E7%94%9F%E6%80%81%E7%AE%80%E4%BB%8B/8.1%20%E6%9C%AC%E7%AB%A0%E7%AE%80%E4%BB%8B/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    08 第八章：生态简介
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../09-%E7%AC%AC%E4%B9%9D%E7%AB%A0%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%83%A8%E7%BD%B2/9.1%20%E4%BD%BF%E7%94%A8ONNX%E8%BF%9B%E8%A1%8C%E9%83%A8%E7%BD%B2%E5%B9%B6%E6%8E%A8%E7%90%86/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    09 第九章：模型部署
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    10 第十章：常见代码解读
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            10 第十章：常见代码解读
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.1%20%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.1 图像分类简介（补充中）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.2%20%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    目标检测简介
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10.3%20%E5%9B%BE%E5%83%8F%E5%88%86%E5%89%B2/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    10.3 图像分割简介（补充中）
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../LSTM%E8%A7%A3%E8%AF%BB%E5%8F%8A%E5%AE%9E%E6%88%98/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    文章结构
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    文章结构
+  </span>
+  
+
+      </a>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ResNet%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ResNet源码解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Swin-Transformer%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Swin Transformer解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Transformer%20%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Transformer 解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ViT%E8%A7%A3%E8%AF%BB/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    ViT解读
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    
+  
+  
+    <a href="../YOLO%E7%B3%BB%E5%88%97%E8%A7%A3%E8%AF%BB/MMYOLO%E5%AE%9E%E7%8E%B0/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    YOLO系列解读
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+  
+
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    
+      
+      
+    
+    <li class="md-nav__item md-nav__item--pruned md-nav__item--nested">
+      
+        
+  
+  
+    <a href="../../notebook/" class="md-nav__link">
+      
+  
+  <span class="md-ellipsis">
+    Notebook
+  </span>
+  
+
+      
+        <span class="md-nav__icon md-icon"></span>
+      
+    </a>
+  
+
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/10-第十章：常见代码解读/RNN详解及其实现.md" title="编辑此页" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+    </a>
+  
+  
+    
+      
+    
+    <a href="https://github.com/EanYang7/pytorch_docs/tree/main/docs/10-第十章：常见代码解读/RNN详解及其实现.md" title="查看本页的源代码" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0 8a5 5 0 0 1-5-5 5 5 0 0 1 5-5 5 5 0 0 1 5 5 5 5 0 0 1-5 5m0-12.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5Z"/></svg>
+    </a>
+  
+
+
+<h1 id="_1">文章结构<a class="headerlink" href="#_1" title="Permanent link">⚓︎</a></h1>
+<p>提及 RNN，绝大部分人都知道他是一个用于序列任务的神经网络，会提及他保存了时序信息，但是，为什么需要考虑时序的信息？为什么说 RNN 保存了时序的信息？RNN又存在哪些问题？ 本篇内容将按照以下顺序逐步带你摸清 RNN 的细节之处，并使用 PyTorch 来完成一个自己的文本分类模型。</p>
+<ol>
+<li>为什么需要 RNN？</li>
+<li>RNN 理解及其简单实现。</li>
+<li>用 RNN 完成文本分类任务。</li>
+<li>RNN 存在的问题。</li>
+</ol>
+<h1 id="rnn">为什么需要 RNN？<a class="headerlink" href="#rnn" title="Permanent link">⚓︎</a></h1>
+<p>在现实生活的世界中，有很多的内容是有着前后关系的，比如你所阅读的这段文字，他并不是毫无理由的随机组合，而是我构思之后按顺序写下的一个个文字。除了文字之外，例如人的发音、物品的价格的曲线、温度变化等等，都是有着前后顺序存在的。</p>
+<p>很明显，当知道了前面的信息，就可以对后面的信息进行合理的预测。比如，前十天温度都只有20度，明天的温度无论如何不可能零下；这个商品一年来价格都在30左右浮动，明天我去买他的时候，准备40就足够了；老师很好的表扬了你，紧跟着说了一个但是，你就知道他的内容要开始转折了。这就是隐藏在日常生活中的序列信息，因为已经知道了前面发生的内容，所以才可以推理后面的内容。</p>
+<p>那么，可以用传统的多层感知机来处理序列问题吗？按照基本的多层感知机模型方案来实现，应该是这样的：将序列输入固定成一个 <span class="arithmatex">\(d\)</span> 维向量，就可以送入多层感知机进行学习，形如公式：
+$$
+ \mathbf{H} = \phi(\mathbf{X} \mathbf{W}<em>{xh} + \mathbf{b}</em>{h})
+$$
+ 公式中， <span class="arithmatex">\(\phi\)</span> 表示激活函数，<span class="arithmatex">\(\mathbf{X} \in \mathbb{R}^{n \times d}\)</span> 表示一组小批量样本，其中 <span class="arithmatex">\(n\)</span> 是样本大小， <span class="arithmatex">\(d\)</span> 表示输入的特征维度。：<span class="arithmatex">\(\mathbf{W}_{xh} \in \mathbb{R}^{d \times h}\)</span>表示模型权重参数，<span class="arithmatex">\(d \in \mathbb{R}^{1 \times h}\)</span>表示模型偏置。最后可以得到隐藏层输入：<span class="arithmatex">\(\mathbf{H} \in \mathbb{R}^{n \times h}\)</span>，其中 <span class="arithmatex">\(h\)</span> 表示隐藏层大小。</p>
+<p>紧接着，模型可以使用下面的公式进行计算，得到输出：
+$$
+\mathbf{O} = \mathbf{H}\mathbf{W}_{hq} + \mathbf{b}_q
+$$
+其中，<span class="arithmatex">\(\mathbf{O} \in \mathbb{R}^{n \times q}\)</span> 为模型输出变量，<span class="arithmatex">\(q\)</span> 表示输出层向量，由于本次的任务是一个文本分类任务，那这里 <span class="arithmatex">\(q\)</span> 就表示文本类别，可以使用 <span class="arithmatex">\(\mathbf{Softmax(O)}\)</span> 来进行概率预测。</p>
+<p>但是，上面的流程有一个很明显的前置条件：<strong>固定成 <span class="arithmatex">\(d\)</span> 维向量</strong>，也就是说，传统的多层感知机，是不能对变长序列进行处理的。但是，<strong>在序列任务中，序列长短很明显是并不相同的</strong>，不仅需要用一天的数据预测明天的结果，也可能需要拿一年的数据预测明天的结果。在这样的情况下，如果还想要使用传统的多层感知机，就会面临着一个巨大的问题：如何将一天的内容与一年的内容变化成相同的 <span class="arithmatex">\(d\)</span> 维向量？</p>
+<p>除此之外，序列信息可能还有另外一个情况：<strong>某些信息可能出现在序列的不同位置。虽然信息出现在不同的位置，但是他可能表达出了相同的含义</strong>。</p>
+<p>举例来说：当我们和老师谈话时，如果他表扬了我们半小时，然后说："但是..."，我们往往是不担心的，因为他可能只是为了指出一些小问题。如果他刚刚表扬了一句话，紧接着就说“但是”，那我们就必须做好面对半小时的狂风暴雨。还有另外一种可能，老师可能连续批评你很久，然后使用“但是”转折，你就会在这时候如释重负，因为你知道这场谈话就快要结束了。这就是我们根据前文(表扬的内容和时间)，在老师说出"但是"的时候，所作出的判断。</p>
+<p>上面提到的两个问题，使用多层感知机本身似乎难以解决，但是所幸，RNN 从一个更常规的思路出发来解决这个问题：<strong>记住之前看到的内容，并结合当前看到的内容，来预测之后可能的内容。</strong></p>
+<h1 id="rnn_1">RNN 理解及其简单实现<a class="headerlink" href="#rnn_1" title="Permanent link">⚓︎</a></h1>
+<p>根据开篇的内容，相信你已经可以简单的理解为什么传统的多层感知机无法很好的解决序列信息，接下来我们开始理解，RNN 如何记忆之前的内容的。</p>
+<p>在这里，我先放出 RNN 的公式，请将其与多层感知机公式进行对比：
+$$
+\mathbf{H}<em>t = \phi(\mathbf{X}_t \mathbf{W}</em>{xh} + \mathbf{H}<em>{t-1} \mathbf{W}</em>{hh}  + \mathbf{b}_h).
+$$
+可以看到，与上一个公式相比，这里最明显的一点是多了一个 <span class="arithmatex">\(\mathbf{H}_{t-1} \mathbf{W}_{hh}\)</span> ，从公式上似乎很好理解，<span class="arithmatex">\(\mathbf{H}_{t-1}\)</span> 表示着前一时刻的隐藏状态，表示的是<strong>之前看到的内容</strong>，然后加上当前时刻的输入 <span class="arithmatex">\(\mathbf{X}_t\)</span>，就可以输出当前时刻的隐藏结果 <span class="arithmatex">\(\mathbf{H}_{t}\)</span>。在得到隐藏结果后，它就可以被用于下一步的计算。</p>
+<p>当然，这个迭代过程也可能随时终止，如果将得到的隐藏结果用于输出，便可以直接得到输出结果，公式表达为：
+$$
+\mathbf{O} = \phi(\mathbf{H}<em>{t} \mathbf{W}</em>{hq}  + \mathbf{b}_q).
+$$</p>
+<p>可以看到，公式四与公式二极其相似，仅有隐藏状态 <span class="arithmatex">\(\mathbf{H}\)</span> 略有不同。</p>
+<p>此时，根据以上公式及其理解，已经可以构建一个简单的 RNN 模型了：
+<div class="highlight"><pre><span></span><code><span class="k">class</span> <span class="nc">RNNDemo</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">CharRNNClassify</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span> <span class="o">=</span> <span class="n">hidden_size</span>
+        <span class="c1"># 计算隐藏状态 H</span>
+        <span class="c1"># 因为要用以下一次计算，所以输出维度应该是 hidden_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i2h</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">hidden_size</span><span class="p">)</span>
+        <span class="c1"># 输出结果 O</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">i2o</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">input_size</span> <span class="o">+</span> <span class="n">hidden_size</span><span class="p">,</span> <span class="n">output_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">LogSoftmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">):</span>
+        <span class="c1"># 将 X 和 Ht-1 合并</span>
+        <span class="n">combined</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="nb">input</span><span class="p">,</span> <span class="n">hidden</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># 计算 Ht</span>
+        <span class="n">hidden</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2h</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+        <span class="c1"># 计算当前情况下的输出</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">i2o</span><span class="p">(</span><span class="n">combined</span><span class="p">)</span>
+        <span class="c1"># 分类任务使用 softmax 进行概率预测</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">softmax</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="c1"># 返回预测结果 和 当前的隐藏状态</span>
+        <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span>
+    <span class="k">def</span> <span class="nf">initHidden</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># 避免随机生成的 H0 干扰后续结果</span>
+        <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hidden_size</span><span class="p">)</span>
+</code></pre></div>
+辅助代码理解：根据公式三可知，<span class="arithmatex">\(\mathbf{W}_{xh}\)</span> 和 <span class="arithmatex">\(\mathbf{W}_{hh}\)</span> 在输入阶段时两者互不影响，所以在 <code>self.i2h = nn.Linear(input_size + hidden_size, hidden_size)</code> 中对输入的维度进行扩容，前 <code>input_size</code> 与公式 <span class="arithmatex">\(\mathbf{W}_{xh}\)</span> 对应，而后面的 <code>hidden_size</code> 则是和 <span class="arithmatex">\(\mathbf{W}_{hh}\)</span> 对应。</p>
+<p>阅读代码之后，请根据代码和公式，来回忆第一部分提出的两个问题，通过回答这两个问题，就可以进一步的分析 RNN。</p>
+<p>第一个问题是对于不同的序列长度，如何进行处理其向量表示：</p>
+<p>从公式中可以看到，RNN 并不要求不同的序列表示成相同的维度，而是要求序列中的每一个值，表示成为相同的维度，这样，我们可以将在 <span class="arithmatex">\(t\)</span> 时刻输入的值视为的 <span class="arithmatex">\(\mathbf{X}_t\)</span>，并且结合之前时刻输入并计算得来的隐藏状态 <span class="arithmatex">\(\mathbf{H}_{t-1}\)</span>，得到当前时刻的结果，这样无论序列实际长度如何，我们随时可以在想要中断的时候将隐藏状态转变成输出的结果，甚至我们可以在输入的同时，得到输出的结果。
+【图片，待补充】</p>
+<p>第二个问题，某些信息可能出现在序列的不同位置，但是其表达的含义是相同的：</p>
+<p>对于这个问题，单独查看公式与代码可能不太好理解，但是可以从卷积神经网络中得到一定的灵感。</p>
+<p>卷积神经网络具有平移等变性，也就是说输入的 <span class="arithmatex">\(\mathbf{X}\)</span> 不会因为位置的变化而导致输出的不同，这得益于卷积核使用了参数共享，无论图片哪个位置进行输入，只要卷积核的参数不变，输入值就不变，其结果就不会发生变化。</p>
+<p>扭回头来看 RNN 中，其 <span class="arithmatex">\(\mathbf{X}\)</span>  与 <span class="arithmatex">\(\mathbf{H}\)</span> 所使用的权重矩阵一直是一个，也就是说 <span class="arithmatex">\(\mathbf{W}_{xh}\)</span> 和 <span class="arithmatex">\(\mathbf{W}_{hh}\)</span> 是参数共享的，那么无论从序列的哪个位置进行输入，只要输入内容完全一样，其输出结果也就是完全一样的的。</p>
+<p>在理解了 RNN 来龙去脉之后，接下来开始从 RNN 的在实际文本分类中进行更深入的分析。(注：该样例源自 <a href="https://pytorch.org/tutorials/intermediate/char_rnn_classification_tutorial.html">Torch 官方教程</a>)。</p>
+<h1 id="rnn_2">RNN 完成文本分类任务<a class="headerlink" href="#rnn_2" title="Permanent link">⚓︎</a></h1>
+<p>完成一个基本的算法任务，有以下流程：数据分析、数据转换、构建模型、定义训练函数、执行训练、保存模型、评估模型。</p>
+<p>这里摘取官方教程中部分关键代码进行讲解，可以直接<a href="https://pytorch.org/tutorials/_downloads/13b143c2380f4768d9432d808ad50799/char_rnn_classification_tutorial.ipynb">点击这里</a>直接下载官方 notebook进行训练。训练所用数据位于<a href="https://download.pytorch.org/tutorial/data.zip">这里</a>。</p>
+<p>在 notebook 第一个可执行 cell 中，首先定义了可用字符 <code>all_letters</code> 和 可用字符数量 <code>n_letters</code> 。同时，将下载的数据转为 ASCII 编码，使用  Dict l类型进行存储。其保存格式为：<code>{language: [names ...]}</code>。</p>
+<p>在第三个 cell 中，定义了三个方法，主要目的是将由 <span class="arithmatex">\(n\)</span> 个字符组成的句子变成一个 <span class="arithmatex">\(n \times d\)</span> 的向量，其中 <span class="arithmatex">\(d\)</span> 表示字符特征，在这里使用 One-Hot 编码。由于 One-Hot 编码形为 <span class="arithmatex">\(1 \times n\_letters\)</span>，则最终形状为 <span class="arithmatex">\(n \times 1 \times n\_letters\)</span>。</p>
+<p>第四个 Cell 中，定义了基本的 RNN 模型的代码与上方代码一致，并设置隐藏层大小为128。接下来的第五个和第六个可执行 Cell中，对于 RNN 进行简单的测试。</p>
+<p>在这里，简单的讲解第六个 Cell，第六个 Cell 代码如下：
+<div class="highlight"><pre><span></span><code><span class="c1"># 将 Albert 转为 6 * 1 * n_letters 的 Tensor</span>
+<span class="nb">input</span> <span class="o">=</span> <span class="n">lineToTensor</span><span class="p">(</span><span class="s1">&#39;Albert&#39;</span><span class="p">)</span>
+<span class="c1"># 设置 h0 全零的原因在上面提到过</span>
+<span class="n">hidden</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_hidden</span><span class="p">)</span>
+<span class="c1"># 获取 output 和 h1</span>
+<span class="n">output</span><span class="p">,</span> <span class="n">next_hidden</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="nb">input</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">hidden</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+</code></pre></div>
+第三行中 <code>rnn(input[0], hidden)</code>，输入了首字母 也就是 'A' 的 One-Hot 编码，输出 <code>output</code> 是下一个字符可能是什么的概率，而 <code>next-hidden</code> 则是 用于搭配 <code>input[1]</code> 进行下一步输入训练的模型。</p>
+<p>跳过七八九三个 Cell 后，我们再对 train 所在的 Cell 进行分析，下面是相关代码:
+<div class="highlight"><pre><span></span><code><span class="c1"># 设置学习率</span>
+<span class="n">learning_rate</span> <span class="o">=</span> <span class="mf">0.005</span> 
+<span class="c1"># 输入参数中， categor_tensor 表示类别，用以计算 loss</span>
+<span class="c1"># line_tensor 是由一句话所转变的 tensor, shape: n * 1 * n_letter</span>
+<span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">category_tensor</span><span class="p">,</span> <span class="n">line_tensor</span><span class="p">):</span>
+    <span class="c1"># 设置 H0</span>
+    <span class="n">hidden</span> <span class="o">=</span> <span class="n">rnn</span><span class="o">.</span><span class="n">initHidden</span><span class="p">()</span>
+    <span class="c1"># 梯度清零</span>
+    <span class="n">rnn</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+    <span class="c1"># 将字符挨个输入</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">line_tensor</span><span class="o">.</span><span class="n">size</span><span class="p">()[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">output</span><span class="p">,</span> <span class="n">hidden</span> <span class="o">=</span> <span class="n">rnn</span><span class="p">(</span><span class="n">line_tensor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">hidden</span><span class="p">)</span>
+    <span class="c1"># 计算损失</span>
+    <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">category_tensor</span><span class="p">)</span>
+    <span class="c1"># 梯度回传</span>
+    <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+
+    <span class="c1"># Add parameters&#39; gradients to their values, multiplied by learning rate</span>
+    <span class="c1"># 这里其实是一个手动的优化器 optimizer</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">rnn</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">add_</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">grad</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=-</span><span class="n">learning_rate</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output</span><span class="p">,</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+</code></pre></div>
+结合注释，进一步观察代码，可以看到，对于一个变长序列，在输入最后一个字符之前，都使用 <code>hidden</code> 作为输出用于下一步的计算，也就是将历史信息带入下一轮训练中去，而在最后一个字符输入结束后，使用 <code>outpt</code> 作为输出，进行文本分类的预测。</p>
+<p>在 <code>train</code> 中的代码进行了对一句话进行了单独的训练，而实际过程中，我们要对多个句子进行训练，在示例代码中，采用随机采样法，从全部数据中随机提取一句话进行训练，并得到最终结果：
+<div class="highlight"><pre><span></span><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="c1"># 迭代次数</span>
+<span class="n">n_iters</span> <span class="o">=</span> <span class="mi">100000</span>
+<span class="c1"># 输出频率</span>
+<span class="n">print_every</span> <span class="o">=</span> <span class="mi">5000</span>
+<span class="c1"># loss计算频率</span>
+<span class="n">plot_every</span> <span class="o">=</span> <span class="mi">1000</span>
+
+<span class="c1"># Keep track of losses for plotting</span>
+<span class="n">current_loss</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">all_losses</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">def</span> <span class="nf">timeSince</span><span class="p">(</span><span class="n">since</span><span class="p">):</span>
+    <span class="n">now</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">since</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">floor</span><span class="p">(</span><span class="n">s</span> <span class="o">/</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="n">s</span> <span class="o">-=</span> <span class="n">m</span> <span class="o">*</span> <span class="mi">60</span>
+    <span class="k">return</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">m </span><span class="si">%d</span><span class="s1">s&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
+<span class="c1"># 开始时间</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="nb">iter</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n_iters</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+    <span class="c1"># 使用随机采样提取一句话及其标签</span>
+    <span class="n">category</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">category_tensor</span><span class="p">,</span> <span class="n">line_tensor</span> <span class="o">=</span> <span class="n">randomTrainingExample</span><span class="p">()</span>
+    <span class="c1"># 训练</span>
+    <span class="n">output</span><span class="p">,</span> <span class="n">loss</span> <span class="o">=</span> <span class="n">train</span><span class="p">(</span><span class="n">category_tensor</span><span class="p">,</span> <span class="n">line_tensor</span><span class="p">)</span>
+    <span class="c1"># 计算loss</span>
+    <span class="n">current_loss</span> <span class="o">+=</span> <span class="n">loss</span>
+
+    <span class="c1"># Print iter number, loss, name and guess</span>
+    <span class="c1"># 输出阶段结果</span>
+    <span class="k">if</span> <span class="nb">iter</span> <span class="o">%</span> <span class="n">print_every</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">guess</span><span class="p">,</span> <span class="n">guess_i</span> <span class="o">=</span> <span class="n">categoryFromOutput</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+        <span class="n">correct</span> <span class="o">=</span> <span class="s1">&#39;✓&#39;</span> <span class="k">if</span> <span class="n">guess</span> <span class="o">==</span> <span class="n">category</span> <span class="k">else</span> <span class="s1">&#39;✗ (</span><span class="si">%s</span><span class="s1">)&#39;</span> <span class="o">%</span> <span class="n">category</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> </span><span class="si">%d%%</span><span class="s1"> (</span><span class="si">%s</span><span class="s1">) </span><span class="si">%.4f</span><span class="s1"> </span><span class="si">%s</span><span class="s1"> / </span><span class="si">%s</span><span class="s1"> </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="nb">iter</span><span class="p">,</span> <span class="nb">iter</span> <span class="o">/</span> <span class="n">n_iters</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="n">timeSince</span><span class="p">(</span><span class="n">start</span><span class="p">),</span> <span class="n">loss</span><span class="p">,</span> <span class="n">line</span><span class="p">,</span> <span class="n">guess</span><span class="p">,</span> <span class="n">correct</span><span class="p">))</span>
+
+    <span class="c1"># Add current loss avg to list of losses</span>
+    <span class="c1"># 保存阶段性 loss</span>
+    <span class="k">if</span> <span class="nb">iter</span> <span class="o">%</span> <span class="n">plot_every</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">all_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_loss</span> <span class="o">/</span> <span class="n">plot_every</span><span class="p">)</span>
+        <span class="n">current_loss</span> <span class="o">=</span> <span class="mi">0</span>
+</code></pre></div>
+到这里，RNN 训练的代码可以说讲解结束了，保存以及推理在理解了训练的过程上并不算难事，所以不再进行讲解。</p>
+<p>接下来再根据文本分类任务对 RNN 进行一次分析。可以看到，在本次任务中，一个单独的词作为一个序列，每个词的长短不一并不会影响 RNN 的训练过程，而序列中的值，则是字符，每个字符都构成了相同的向量： <span class="arithmatex">\(1 \times d\)</span> ，这使得训练的过程也比较的统一。</p>
+<p>再简单的举一反三，可以结合之前所学的 word2vec、Glovec 等模型将词语转为向量，将一句话转为一个序列，每个词转为序列中的一个值，这样的话，就可以对一句话进行文本分类了。</p>
+<h1 id="rnn_3">RNN 存在的问题<a class="headerlink" href="#rnn_3" title="Permanent link">⚓︎</a></h1>
+<p>前面讲解了 RNN 是如何解决简单神经网络无法处理序列问题的，但是 RNN 是否就完美无缺？能应用于全部的序列任务了呢？答案当然是否定的。</p>
+<p>这是由于 RNN 存在一个巨大的缺陷：梯度爆炸与梯度消失。</p>
+<p>重新审查代码与公式，可以很轻松的发现，在序列达到末尾时，我们才需要计算损失与进行梯度回传，此时将 <span class="arithmatex">\(\mathbf{H}_t\)</span> 展开，其内部存在 <span class="arithmatex">\(\mathbf{W}_{hh} \times \mathbf{H}_{t-1}\)</span>。而将 <span class="arithmatex">\(\mathbf{H}_{t-1}\)</span> 展开，也存在一个 <span class="arithmatex">\(\mathbf{W}_{hh}\)</span>，那么很明显 如果 <span class="arithmatex">\(\mathbf{W}_{hh}\)</span> 大于 1，在经过 <span class="arithmatex">\(t\)</span> 次连乘之后会产生梯度爆炸，如果  <span class="arithmatex">\(\mathbf{W}_{hh}\)</span> 小于 1，在经过 <span class="arithmatex">\(t\)</span> 次连乘之后又会产生梯度消失。同理，在 <span class="arithmatex">\(\mathbf{W}_{xh}\)</span> 上，也存在这样的依赖关系，也会导致梯度爆炸或者消失。</p>
+<p>梯度的消失也可以这样思考：前方节点的隐藏信息总和占了 0.5，而当前节点隐藏信息占了 0.5，随着序列长度的增加，位于开始部分节点的隐藏信息占比几乎是指数型下降，从 1/2 到 1/4 到 1/8，以此类推。可以参考下图尝试理解。因此，在 RNN 中，梯度消失就成了一个比梯度爆炸更关注的难题，因为这使得模型只能记得离自己最近的几个节点的状态，而很难考虑更远一步的状态，无法更好的关联上下文信息。</p>
+<p>为了解决这个问题，我们可以考虑使用 梯度剪裁的方式保证梯度传递过程中不大于1，从而使得梯度不会爆炸，但是，我们无法阻止梯度的消失。当然，也可以查看下一篇，针对 RNN 进行优化的 LSTM、GRU 等算法</p>
+
+  <hr>
+<div class="md-source-file">
+  <small>
+    
+      最后更新:
+      <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+        <br>
+        创建日期:
+        <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-date">November 30, 2023</span>
+      
+    
+  </small>
+</div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+  回到页面顶部
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="页脚" >
+        
+          
+          <a href="../LSTM%E8%A7%A3%E8%AF%BB%E5%8F%8A%E5%AE%9E%E6%88%98/" class="md-footer__link md-footer__link--prev" aria-label="上一页: 文章结构">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                上一页
+              </span>
+              <div class="md-ellipsis">
+                文章结构
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../ResNet%E6%BA%90%E7%A0%81%E8%A7%A3%E8%AF%BB/" class="md-footer__link md-footer__link--next" aria-label="下一页: ResNet源码解读">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                下一页
+              </span>
+              <div class="md-ellipsis">
+                ResNet源码解读
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2023 Ean Yang
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/YQisme" target="_blank" rel="noopener" title="github主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://space.bilibili.com/244185393?spm_id_from=333.788.0.0" target="_blank" rel="noopener" title="b站主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M488.6 104.1c16.7 18.1 24.4 39.7 23.3 65.7v202.4c-.4 26.4-9.2 48.1-26.5 65.1-17.2 17-39.1 25.9-65.5 26.7H92.02c-26.45-.8-48.21-9.8-65.28-27.2C9.682 419.4.767 396.5 0 368.2V169.8c.767-26 9.682-47.6 26.74-65.7C43.81 87.75 65.57 78.77 92.02 78h29.38L96.05 52.19c-5.75-5.73-8.63-13-8.63-21.79 0-8.8 2.88-16.06 8.63-21.797C101.8 2.868 109.1 0 117.9 0s16.1 2.868 21.9 8.603L213.1 78h88l74.5-69.397C381.7 2.868 389.2 0 398 0c8.8 0 16.1 2.868 21.9 8.603 5.7 5.737 8.6 12.997 8.6 21.797 0 8.79-2.9 16.06-8.6 21.79L394.6 78h29.3c26.4.77 48 9.75 64.7 26.1zm-38.8 69.7c-.4-9.6-3.7-17.4-10.7-23.5-5.2-6.1-14-9.4-22.7-9.8H96.05c-9.59.4-17.45 3.7-23.58 9.8-6.14 6.1-9.4 13.9-9.78 23.5v194.4c0 9.2 3.26 17 9.78 23.5s14.38 9.8 23.58 9.8H416.4c9.2 0 17-3.3 23.3-9.8 6.3-6.5 9.7-14.3 10.1-23.5V173.8zm-264.3 42.7c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.2 6.3-14 9.5-23.6 9.5-9.6 0-17.5-3.2-23.6-9.5-6.1-6.3-9.4-14-9.8-23.2v-33.3c.4-9.1 3.8-16.9 10.1-23.2 6.3-6.3 13.2-9.6 23.3-10 9.2.4 17 3.7 23.3 10zm191.5 0c6.3 6.3 9.7 14.1 10.1 23.2V273c-.4 9.2-3.7 16.9-9.8 23.2-6.1 6.3-14 9.5-23.6 9.5-9.6 0-17.4-3.2-23.6-9.5-7-6.3-9.4-14-9.7-23.2v-33.3c.3-9.1 3.7-16.9 10-23.2 6.3-6.3 14.1-9.6 23.3-10 9.2.4 17 3.7 23.3 10z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+    <a href="https://eanyang7.com" target="_blank" rel="noopener" title="个人主页" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M112 48a48 48 0 1 1 96 0 48 48 0 1 1-96 0zm40 304v128c0 17.7-14.3 32-32 32s-32-14.3-32-32V256.9l-28.6 47.6c-9.1 15.1-28.8 20-43.9 10.9s-20-28.8-10.9-43.9l58.3-97c17.4-28.9 48.6-46.6 82.3-46.6h29.7c33.7 0 64.9 17.7 82.3 46.6l58.3 97c9.1 15.1 4.2 34.8-10.9 43.9s-34.8 4.2-43.9-10.9L232 256.9V480c0 17.7-14.3 32-32 32s-32-14.3-32-32V352h-16z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.instant", "navigation.instant.progress", "navigation.tracking", "navigation.prune", "navigation.top", "toc.follow", "header.autohide", "navigation.footer", "search.suggest", "search.highlight", "search.share", "content.action.edit", "content.action.view", "content.code.copy"], "search": "../../assets/javascripts/workers/search.f886a092.min.js", "translations": {"clipboard.copied": "\u5df2\u590d\u5236", "clipboard.copy": "\u590d\u5236", "search.result.more.one": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.more.other": "\u5728\u8be5\u9875\u4e0a\u8fd8\u6709 # \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.none": "\u6ca1\u6709\u627e\u5230\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.one": "\u627e\u5230 1 \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.other": "# \u4e2a\u7b26\u5408\u6761\u4ef6\u7684\u7ed3\u679c", "search.result.placeholder": "\u952e\u5165\u4ee5\u5f00\u59cb\u641c\u7d22", "search.result.term.missing": "\u7f3a\u5c11", "select.version": "\u9009\u62e9\u5f53\u524d\u7248\u672c"}}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.cd18aaf1.min.js"></script>
+      
+    
+  </body>
+</html>
