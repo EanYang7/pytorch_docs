@@ -21,7 +21,7 @@ jobs:
           restore-keys: |
             mkdocs-material-
       - run: pip install mkdocs-material 
-      # - run: pip install mkdocs-jupyter
+      - run: pip install mkdocs-jupyter
       - run: pip install jieba
       - run: pip install mkdocs-git-revision-date-localized-plugin
       - run: mkdocs gh-deploy --force
