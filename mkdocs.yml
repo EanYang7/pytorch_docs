@@ -83,8 +83,8 @@ plugins:
       separator: '[\s\u200b\-]'
   - git-revision-date-localized:
       enable_creation_date: true
-  # - mkdocs-jupyter:
-  #   include_source: True
+  - mkdocs-jupyter:
+      include_source: True
 
 markdown_extensions:
   - toc:
